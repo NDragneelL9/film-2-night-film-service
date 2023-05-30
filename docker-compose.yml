@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  API:
+    image: 'film2night'
+    ports:
+      - "8080:8080"
+    depends_on:
+      PostgreSQL:
+        condition: service_healthy
+
+  PostgreSQL:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      retries: 2
