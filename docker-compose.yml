@@ -3,7 +3,7 @@ services:
   API:
     image: 'film2night'
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       PostgreSQL:
         condition: service_healthy
@@ -20,3 +20,11 @@ services:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       retries: 2
+
+  WEB:
+    image: tomcat
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target/film2night.war:/usr/local/tomcat/webapps/film2night.war
+      - ./target/film2night:/usr/local/tomcat/webapps/ROOT
