@@ -10,9 +10,9 @@ import java.sql.ResultSet;
  */
 public class App {
     public static void main(String[] args) {
-        String DBurl = "jdbc:postgresql://PostgreSQL/";
-        String DBuser = "postgres";
-        String DBpass = "postgres";
+        String DBurl = "jdbc:postgresql://PostgreSQL/film2night";
+        String DBuser = "f2n_admin";
+        String DBpass = "film2night";
         System.out.println("App started");
         PostgreDB postgreDB = new PostgreDB(DBurl, DBuser, DBpass);
         try (ResultSet rs = postgreDB.selectQuery("SELECT 5;")) {

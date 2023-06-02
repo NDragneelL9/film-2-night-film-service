@@ -17,7 +17,7 @@ public class BaseServlet extends HttpServlet {
                 out.println("<title>Hello servlet World!</title>");
                 out.println("</head>");
                 out.println("<body>");
-                out.println("<h1>Hello servlet World!</h1>");
+                out.println("<h1>Hello servlets!</h1>");
                 out.println("</body>");
                 out.println("</html>");
         }
