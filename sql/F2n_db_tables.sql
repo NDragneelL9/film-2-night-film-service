@@ -1,6 +1,6 @@
-DROP TABLE "films_genres", "films_countries";
-DROP TABLE "films", "countries", "genres";
-DROP TYPE "film_type";
+CREATE USER f2n_admin with encrypted password 'film2night';
+
+SET ROLE f2n_admin;
 
 CREATE TYPE "film_type" AS ENUM (
   'FILM',

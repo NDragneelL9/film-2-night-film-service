@@ -25,6 +25,7 @@ replay_pid*
 
 # build folder
 /target
+/postgres-data
 
 # vscode folder
 .vscode
