@@ -17,11 +17,24 @@ git clone https://github.com/NDragneelL9/film-2-night-film-service.git
 2. Change directory to `film-2-night-film-service` and build application
 ```
 cd film-2-night-film-service
+mvn clean package assembly:single
+```
+3. Build docker image:
+```
+docker build -t film2night .
+```
+4. Run docker container with docker-compose in detached mode (*make sure all needed ports are free*):
+```
+docker-compose up -d
+```
+5. To apply changes:
+```
+# to apply servlet changes rebuild war file
 mvn package
-```
-3. Run application using:
-```
-mvn exec:java
+docker-compose restart
+# to apply app changes rebuild fat jar
+mvn assembly:single
+docker-compose restart
 ```
 # Contributing
 Just fork the repository from the develop branch, follow [Getting started](#getting-started) section, implement changes you want to propose and make a pull request. Also, there are issues in repository, feel free to submit a new one or participate in existing.
