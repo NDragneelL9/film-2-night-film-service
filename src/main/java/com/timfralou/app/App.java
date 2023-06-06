@@ -1,6 +1,7 @@
 package com.timfralou.app;
 
 import com.timfralou.app.postgresql.PostgreDB;
+import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
@@ -10,9 +11,16 @@ import java.sql.ResultSet;
  */
 public class App {
     public static void main(String[] args) {
+        // DBurl and dotenv paths inside docker container
         String DBurl = "jdbc:postgresql://PostgreSQL/film2night";
-        String DBuser = "f2n_admin";
-        String DBpass = "film2night";
+        Dotenv dotenv = Dotenv
+                .configure()
+                .directory("/usr/local/lib")
+                .filename("env")
+                .load();
+
+        String DBuser = dotenv.get("PSQL_F2N_USER");
+        String DBpass = dotenv.get("PSQL_F2N_PWD");
         System.out.println("App started");
         PostgreDB postgreDB = new PostgreDB(DBurl, DBuser, DBpass);
         try (ResultSet rs = postgreDB.selectQuery("SELECT 5;")) {
