@@ -29,3 +29,6 @@ replay_pid*
 
 # vscode folder
 .vscode
+
+# .env
+.env

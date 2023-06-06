@@ -32,9 +32,12 @@ docker-compose up -d
 # to apply servlet changes rebuild war file
 mvn package
 docker-compose restart
-# to apply app changes rebuild fat jar
+# to apply app changes u have to rebuild film2night dockerimage
+docker-compose down
+docker rmi film2night
 mvn assembly:single
-docker-compose restart
+docker build -t film2night .
+docker-compose up -d
 ```
 # Contributing
 Just fork the repository from the develop branch, follow [Getting started](#getting-started) section, implement changes you want to propose and make a pull request. Also, there are issues in repository, feel free to submit a new one or participate in existing.
