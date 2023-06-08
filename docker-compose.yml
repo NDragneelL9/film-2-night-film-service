@@ -22,7 +22,11 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
       - ./sql/F2n_db_tables.sql:/docker-entrypoint-initdb.d/F2n_db_tables.sql
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${PSQL_USER} -d ${PSQL_DB}" ]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${PSQL_F2N_USER} -d ${PSQL_DB}"
+        ]
       interval: 5s
       retries: 2
 
