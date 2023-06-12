@@ -2,7 +2,7 @@ CREATE USER f2n_admin with encrypted password 'film2night';
 
 SET ROLE f2n_admin;
 
-CREATE TYPE "film_type" AS ENUM (
+CREATE TYPE film_type AS ENUM (
   'FILM',
   'VIDEO',
   'TV_SERIES',
@@ -10,23 +10,23 @@ CREATE TYPE "film_type" AS ENUM (
   'TV_SHOW'
 );
 
-CREATE TABLE "films" (
-  "id" int PRIMARY KEY,
+CREATE TABLE films (
+  "id" SERIAL PRIMARY KEY,
   "kinopoiskId" int NOT NULL UNIQUE,
-  "imbdId" int NOT NULL UNIQUE,
-  "nameRU" varchar,
+  "imbdId" int UNIQUE,
+  "nameRu" varchar,
   "nameEn" varchar,
-  "nameOriginal" varchar NOT NULL,
+  "nameOriginal" varchar,
   "reviewsCount" int,
   "ratingKinopoisk" real,
   "ratingKinopoiskVoteCount" int,
   "ratingImdb" real,
   "ratingImdbVoteCount" int,
   "webUrl" varchar,
-  "year" int NOT NULL,
-  "filmLength" int NOT NULL,
+  "year" int,
+  "filmLength" int,
   "description" varchar,
-  "type" film_type NOT NULL,
+  "type" film_type,
   "ratingMpaa" varchar,
   "ratingAgeLimits" varchar,
   "hasImax" bool,
@@ -34,32 +34,32 @@ CREATE TABLE "films" (
   "lastSync" varchar
 );
 
-CREATE TABLE "countries" (
-  "id" int PRIMARY KEY,
+CREATE TABLE countries (
+  "id" SERIAL PRIMARY KEY,
   "country" varchar NOT NULL UNIQUE
 );
 
-CREATE TABLE "genres" (
-  "id" int PRIMARY KEY,
+CREATE TABLE genres (
+  "id" SERIAL PRIMARY KEY,
   "genre" varchar NOT NULL UNIQUE
 );
 
-CREATE TABLE "films_genres" (
+CREATE TABLE films_genres (
   "film_id" int,
   "genre_id" int,
   CONSTRAINT films_genres_pkey PRIMARY KEY (film_id, genre_id)
 );
 
-CREATE TABLE "films_countries" (
+CREATE TABLE films_countries (
   "film_id" int,
   "country_id" int,
   CONSTRAINT films_countries_pkey PRIMARY KEY (film_id, country_id)
 );
 
-ALTER TABLE "films_genres" ADD FOREIGN KEY ("film_id") REFERENCES "films" ("id");
+ALTER TABLE films_genres ADD FOREIGN KEY ("film_id") REFERENCES "films" ("id");
 
-ALTER TABLE "films_genres" ADD FOREIGN KEY ("genre_id") REFERENCES "genres" ("id");
+ALTER TABLE films_genres ADD FOREIGN KEY ("genre_id") REFERENCES "genres" ("id");
 
-ALTER TABLE "films_countries" ADD FOREIGN KEY ("film_id") REFERENCES "films" ("id");
+ALTER TABLE films_countries ADD FOREIGN KEY ("film_id") REFERENCES "films" ("id");
 
-ALTER TABLE "films_countries" ADD FOREIGN KEY ("country_id") REFERENCES "countries" ("id");
+ALTER TABLE films_countries ADD FOREIGN KEY ("country_id") REFERENCES "countries" ("id");

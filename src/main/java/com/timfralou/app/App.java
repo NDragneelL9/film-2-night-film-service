@@ -12,13 +12,13 @@ import java.sql.ResultSet;
 public class App {
     public static void main(String[] args) {
         // DBurl and dotenv paths inside docker container
-        String DBurl = "jdbc:postgresql://PostgreSQL/film2night";
         Dotenv dotenv = Dotenv
                 .configure()
                 .directory("/usr/local/lib")
                 .filename("env")
                 .load();
 
+        String DBurl = "jdbc:postgresql://PostgreSQL/film2night";
         String DBuser = dotenv.get("PSQL_F2N_USER");
         String DBpass = dotenv.get("PSQL_F2N_PWD");
         System.out.println("App started");
