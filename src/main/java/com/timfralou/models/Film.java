@@ -32,12 +32,12 @@ public class Film {
     // private int reviewsCount;
     @JsonProperty("ratingKinopoisk")
     @JsonAlias("rating")
-    private float ratingKinopoisk;
+    private String ratingKinopoisk;
     @JsonProperty("ratingKinopoiskVoteCount")
     @JsonAlias("ratingVoteCount")
     private int ratingKinopoiskVoteCount;
     // @JsonProperty("ratingImdb")
-    // private float ratingImdb;
+    // private String ratingImdb;
     // @JsonProperty("ratingImdbVoteCount")
     // private int ratingImdbVoteCount;
     // @JsonProperty("webUrl")
@@ -77,7 +77,7 @@ public class Film {
         return nameRu;
     }
 
-    public float ratingKinopoisk() {
+    public String ratingKinopoisk() {
         return ratingKinopoisk;
     }
 
@@ -111,6 +111,16 @@ public class Film {
         int mins = Integer.parseInt(hourMin[1]);
         int hoursInMins = hour * 60;
         return hoursInMins + mins;
+    }
+
+    @Override
+    public int hashCode() {
+        return nameRu.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return nameRu.equals(((Film) obj).nameRu);
     }
 
     @Override

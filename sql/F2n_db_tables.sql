@@ -18,7 +18,7 @@ CREATE TABLE films (
   "nameEn" varchar,
   "nameOriginal" varchar,
   "reviewsCount" int,
-  "ratingKinopoisk" real,
+  "ratingKinopoisk" varchar,
   "ratingKinopoiskVoteCount" int,
   "ratingImdb" real,
   "ratingImdbVoteCount" int,
