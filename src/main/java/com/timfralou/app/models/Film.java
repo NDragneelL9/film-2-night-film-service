@@ -1,4 +1,4 @@
-package com.timfralou.models;
+package com.timfralou.app.models;
 
 import java.util.Arrays;
 

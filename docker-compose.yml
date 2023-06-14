@@ -1,15 +1,5 @@
 version: '3.7'
 services:
-  API:
-    image: 'film2night'
-    ports:
-      - "8081:8081"
-    volumes:
-      - ./.env:/usr/local/lib/env
-    depends_on:
-      PostgreSQL:
-        condition: service_healthy
-
   WEB:
     image: tomcat:10.1.9
     ports:
