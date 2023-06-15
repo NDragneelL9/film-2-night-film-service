@@ -20,46 +20,46 @@ public class Film {
     @JsonProperty("kinopoiskId")
     @JsonAlias("filmId")
     private int kinopoiskId;
-    // @JsonProperty("imdbId")
-    // private int imdbId;
+    @JsonProperty("imdbId")
+    private String imdbId;
     @JsonProperty("nameRu")
     private String nameRu;
-    // @JsonProperty("nameEn")
-    // private String nameEn;
-    // @JsonProperty("nameOriginal")
-    // private String nameOriginal;
-    // @JsonProperty("reviewsCount")
-    // private int reviewsCount;
+    @JsonProperty("nameEn")
+    private String nameEn;
+    @JsonProperty("nameOriginal")
+    private String nameOriginal;
+    @JsonProperty("reviewsCount")
+    private int reviewsCount;
     @JsonProperty("ratingKinopoisk")
     @JsonAlias("rating")
     private String ratingKinopoisk;
     @JsonProperty("ratingKinopoiskVoteCount")
     @JsonAlias("ratingVoteCount")
     private int ratingKinopoiskVoteCount;
-    // @JsonProperty("ratingImdb")
-    // private String ratingImdb;
-    // @JsonProperty("ratingImdbVoteCount")
-    // private int ratingImdbVoteCount;
-    // @JsonProperty("webUrl")
-    // private String webUrl;
+    @JsonProperty("ratingImdb")
+    private String ratingImdb;
+    @JsonProperty("ratingImdbVoteCount")
+    private int ratingImdbVoteCount;
+    @JsonProperty("webUrl")
+    private String webUrl;
     @JsonProperty("year")
     private int year;
     @JsonProperty("filmLength")
     private String filmLength;
-    // @JsonProperty("description")
-    // private String description;
-    // @JsonProperty("type")
-    // private filmType type;
-    // @JsonProperty("ratingMpaa")
-    // private String ratingMpaa;
-    // @JsonProperty("ratingAgeLimits")
-    // private String ratingAgeLimits;
-    // @JsonProperty("hasImax")
-    // private boolean hasImax;
-    // @JsonProperty("has3D")
-    // private boolean has3D;
-    // @JsonProperty("lastSync")
-    // private String lastSync;
+    @JsonProperty("description")
+    private String description;
+    @JsonProperty("type")
+    private filmType type;
+    @JsonProperty("ratingMpaa")
+    private String ratingMpaa;
+    @JsonProperty("ratingAgeLimits")
+    private String ratingAgeLimits;
+    @JsonProperty("hasImax")
+    private boolean hasImax;
+    @JsonProperty("has3D")
+    private boolean has3D;
+    @JsonProperty("lastSync")
+    private String lastSync;
     @JsonProperty("genres")
     private Genre[] genres;
     @JsonProperty("countries")
@@ -69,12 +69,32 @@ public class Film {
         // keep
     }
 
+    public long id() {
+        return id;
+    }
+
     public int kinopoiskId() {
         return kinopoiskId;
     }
 
+    public String imdbId() {
+        return imdbId;
+    }
+
     public String nameRu() {
         return nameRu;
+    }
+
+    public String nameEn() {
+        return nameEn;
+    }
+
+    public String nameOriginal() {
+        return nameOriginal;
+    }
+
+    public int reviewsCount() {
+        return reviewsCount;
     }
 
     public String ratingKinopoisk() {
@@ -85,12 +105,52 @@ public class Film {
         return ratingKinopoiskVoteCount;
     }
 
+    public String ratingImdb() {
+        return ratingImdb;
+    }
+
+    public int ratingImdbVoteCount() {
+        return ratingImdbVoteCount;
+    }
+
+    public String webUrl() {
+        return webUrl;
+    }
+
     public int year() {
         return year;
     }
 
     public int filmLength() {
         return toMins(filmLength);
+    }
+
+    public String description() {
+        return description;
+    }
+
+    public filmType type() {
+        return type;
+    }
+
+    public String ratingMpaa() {
+        return ratingMpaa;
+    }
+
+    public String ratingAgeLimits() {
+        return ratingAgeLimits;
+    }
+
+    public boolean hasImax() {
+        return hasImax;
+    }
+
+    public boolean has3D() {
+        return has3D;
+    }
+
+    public String lastSync() {
+        return lastSync;
     }
 
     public Genre[] genres() {
@@ -101,10 +161,6 @@ public class Film {
         return countries;
     }
 
-    /**
-     * @param s H:m timestamp, i.e. [Hour in day (0-23)]:[Minute in hour (0-59)]
-     * @return total minutes after 00:00
-     */
     private static int toMins(String s) {
         String[] hourMin = s.split(":");
         int hour = Integer.parseInt(hourMin[0]);
