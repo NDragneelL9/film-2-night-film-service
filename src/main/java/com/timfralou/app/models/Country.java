@@ -17,4 +17,12 @@ public class Country {
     public String toString() {
         return "Country [country=" + country + "]";
     }
+
+    public long id() {
+        return id;
+    }
+
+    public String country() {
+        return country;
+    }
 }

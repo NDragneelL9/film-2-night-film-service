@@ -13,6 +13,14 @@ public class Genre {
         // keep
     }
 
+    public long id() {
+        return id;
+    }
+
+    public String genre() {
+        return genre;
+    }
+
     @Override
     public String toString() {
         return "Genre [genre=" + genre + "]";
