@@ -113,21 +113,22 @@ public class TopFilmsServlet extends HttpServlet {
 
         Connection conn = DriverManager.getConnection(DBurl, DBuser, DBpass);
         conn.setAutoCommit(false);
-        try (PreparedStatement pstmt = conn.prepareStatement(
-                "INSERT INTO films (\"kinopoiskId\", \"nameRu\", \"ratingKinopoisk\", \"ratingKinopoiskVoteCount\", \"year\", \"filmLength\") "
-                        +
-                        "VALUES (?, ?, ?, ?, ? ,?)")) {
+        try {
+            PreparedStatement ins_films = conn.prepareStatement(
+                    "INSERT INTO films (\"kinopoiskId\", \"nameRu\", \"ratingKinopoisk\", \"ratingKinopoiskVoteCount\", \"year\", \"filmLength\") "
+                            +
+                            "VALUES (?, ?, ?, ?, ? ,?)");
             for (int i = 0; i < films.size(); i++) {
-                pstmt.setInt(1, films.get(i).kinopoiskId());
-                pstmt.setString(2, films.get(i).nameRu());
-                pstmt.setString(3, films.get(i).ratingKinopoisk());
-                pstmt.setInt(4, films.get(i).ratingKinopoiskVoteCount());
-                pstmt.setInt(5, films.get(i).year());
-                pstmt.setInt(6, films.get(i).filmLength());
-                pstmt.addBatch();
+                ins_films.setInt(1, films.get(i).kinopoiskId());
+                ins_films.setString(2, films.get(i).nameRu());
+                ins_films.setString(3, films.get(i).ratingKinopoisk());
+                ins_films.setInt(4, films.get(i).ratingKinopoiskVoteCount());
+                ins_films.setInt(5, films.get(i).year());
+                ins_films.setInt(6, films.get(i).filmLength());
+                ins_films.addBatch();
                 if (i + 1 % BATCH_SIZE == 0 || i == films.size() - 1) {
                     try {
-                        pstmt.executeBatch();
+                        ins_films.executeBatch();
                         conn.commit();
                     } catch (BatchUpdateException ex) {
                         System.out.println(ex);
@@ -135,6 +136,36 @@ public class TopFilmsServlet extends HttpServlet {
                     }
                 }
             }
+            conn.setAutoCommit(true);
+            PreparedStatement ins_countries = conn
+                    .prepareStatement("INSERT INTO films_countries(film_id, country_id) " +
+                            "SELECT f.film_id, c.country_id FROM films as f, countries as c " +
+                            "WHERE f.\"kinopoiskId\" = ? AND c.\"country\" = ?");
+            for (int i = 0; i < films.size(); i++) {
+                int fillmCountriesCount = films.get(i).countries().length;
+                System.out.println(fillmCountriesCount);
+                for (int j = 0; j < fillmCountriesCount; j++) {
+                    ins_countries.setInt(1, films.get(i).kinopoiskId());
+                    ins_countries.setString(2, films.get(i).countries()[j].country());
+                    System.out.println(ins_countries.toString());
+                    ins_countries.executeUpdate();
+                }
+            }
+            PreparedStatement ins_genres = conn.prepareStatement("INSERT INTO films_genres(film_id, genre_id) " +
+                    "SELECT f.film_id, g.genre_id FROM films as f, genres as g " +
+                    "WHERE f.\"kinopoiskId\" = ? AND g.\"genre\" = ?");
+            for (int i = 0; i < films.size(); i++) {
+                int fillmGenresCount = films.get(i).genres().length;
+                System.out.println(fillmGenresCount);
+                for (int j = 0; j < fillmGenresCount; j++) {
+                    ins_genres.setInt(1, films.get(i).kinopoiskId());
+                    ins_genres.setString(2, films.get(i).genres()[j].genre());
+                    System.out.println(ins_genres.toString());
+                    ins_genres.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         conn.close();
     }
