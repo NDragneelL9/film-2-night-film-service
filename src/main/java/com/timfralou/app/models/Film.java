@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 enum filmType {
@@ -14,6 +15,7 @@ enum filmType {
     TV_SHOW
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Film {
     @JsonIgnore
     private long id;
