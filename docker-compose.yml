@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./.env:/usr/local/tomcat/webapps/env
+      - ./.env:/usr/local/env
       - ./target/film2night.war:/usr/local/tomcat/webapps/film2night.war
       - ./target/film2night:/usr/local/tomcat/webapps/ROOT
     depends_on:
@@ -19,10 +19,12 @@ services:
     environment:
       - POSTGRES_PASSWORD=${PSQL_PWD}
       - POSTGRES_USER=${PSQL_USER}
-      - POSTGRES_DB=${PSQL_F2N_DB}
+      - POSTGRES_DB=${PSQL_DB}
     volumes:
+      - ./.env:/usr/local/env
       - ./postgres-data:/var/lib/postgresql/data
-      - ./sql/F2n_db_tables.sql:/docker-entrypoint-initdb.d/F2n_db_tables.sql
+      - ./sql/F2n_db_tables.sql:/home/F2n_db_tables.sql
+      - ./sql/F2n_dbs.sh:/docker-entrypoint-initdb.d/F2n_dbs.sh
     healthcheck:
       test:
         [

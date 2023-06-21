@@ -35,8 +35,8 @@ public class FilmList {
         return filmList;
     }
 
-    public void saveToDB() throws SQLException {
-        PostgreDB db = new PostgreDB();
+    public String saveToDB(String DB_TYPE) throws SQLException {
+        PostgreDB db = new PostgreDB(DB_TYPE);
         Connection conn = db.connect();
         conn.setAutoCommit(false);
 
@@ -45,6 +45,7 @@ public class FilmList {
         insertGenres(conn);
 
         conn.close();
+        return "Succesfully saved to " + DB_TYPE;
     }
 
     private void insertFilms(Connection conn) throws SQLException {

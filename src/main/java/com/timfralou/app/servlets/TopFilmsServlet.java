@@ -52,7 +52,7 @@ public class TopFilmsServlet extends BaseServlet {
         }
 
         try {
-            topFilms.saveToDB();
+            topFilms.saveToDB("MAIN");
         } catch (SQLException ex) {
             System.out.println(ex);
         }

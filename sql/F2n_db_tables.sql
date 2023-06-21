@@ -1,5 +1,3 @@
-CREATE USER f2n_admin with encrypted password 'film2night';
-SET ROLE f2n_admin;
 CREATE TYPE film_type AS ENUM (
   'FILM',
   'VIDEO',
