@@ -14,14 +14,19 @@ The project is developing with pure [JAVA](https://www.java.com/en/) code using 
 ```
 git clone https://github.com/NDragneelL9/film-2-night-film-service.git
 ```
-2. Change directory to `film-2-night-film-service` and build application
+2. Change directory to `film-2-night-film-service`. Add `.env` file based on `.env.example` and build application.
 ```
 cd film-2-night-film-service
-mvn clean package
+# skipping tests because we have no docker containers running yet
+mvn clean package -DskipTests 
 ```
 3. Run docker container with docker-compose in detached mode (*make sure all needed ports are free*):
 ```
 docker-compose up -d
+```
+4. To run tests:
+```
+mvn test
 ```
 5. To apply changes:
 ```
