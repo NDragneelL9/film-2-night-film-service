@@ -8,8 +8,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import com.timfralou.app.models.FilmList;
-import com.timfralou.app.models.FkFilmsList;
 import com.timfralou.app.postgresql.PostgreDB;
+import com.timfralou.app.seeds.FilmListSeed;
 
 public class TopFilmsServletTest {
 
@@ -22,7 +22,7 @@ public class TopFilmsServletTest {
     @Test
     public void saveFilmsToDB() throws SQLException {
         String DB_TYPE = "TEST";
-        FilmList filmList = new FkFilmsList().fakeList();
+        FilmList filmList = new FilmList(new FilmListSeed().filmList());
         assertEquals("Succesfully saved to " + DB_TYPE, filmList.saveToDB(DB_TYPE));
     }
 
