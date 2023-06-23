@@ -1,22 +1,24 @@
-package com.timfralou.app.servlets;
+package com.timfralou.app.models;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
-import com.timfralou.app.models.FilmList;
 import com.timfralou.app.postgresql.PostgreDB;
 import com.timfralou.app.seeds.FilmListSeed;
 
-public class TopFilmsServletTest {
+public class FilmListTest {
 
     @Test
-    public void defaultAssert() {
-        String text = "text";
-        assertEquals("text", text);
+    public void hasFilms() {
+        List<Film> films = new ArrayList<Film>(new FilmListSeed().filmList());
+        FilmList filmList = new FilmList(films);
+        assertEquals(films, filmList.filmList());
     }
 
     @Test

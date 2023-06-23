@@ -1,6 +1,7 @@
 package com.timfralou.app.models;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,7 +13,8 @@ enum filmType {
     VIDEO,
     TV_SERIES,
     MINI_SERIES,
-    TV_SHOW
+    TV_SHOW,
+    UNKNOWN
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -76,99 +78,104 @@ public class Film {
     }
 
     public int kinopoiskId() {
-        return kinopoiskId;
+        return Optional.ofNullable(kinopoiskId).orElse(-1);
     }
 
     public String imdbId() {
-        return imdbId;
+        return Optional.ofNullable(imdbId).orElse("");
     }
 
     public String nameRu() {
-        return nameRu;
+        return Optional.ofNullable(nameRu).orElse("");
     }
 
     public String nameEn() {
-        return nameEn;
+        return Optional.ofNullable(nameEn).orElse("");
     }
 
     public String nameOriginal() {
-        return nameOriginal;
+        return Optional.ofNullable(nameOriginal).orElse("");
     }
 
     public int reviewsCount() {
-        return reviewsCount;
+        return Optional.ofNullable(reviewsCount).orElse(-1);
     }
 
     public String ratingKinopoisk() {
-        return ratingKinopoisk;
+        return Optional.ofNullable(ratingKinopoisk).orElse("");
     }
 
     public int ratingKinopoiskVoteCount() {
-        return ratingKinopoiskVoteCount;
+        return Optional.ofNullable(ratingKinopoiskVoteCount).orElse(-1);
     }
 
     public String ratingImdb() {
-        return ratingImdb;
+        return Optional.ofNullable(ratingImdb).orElse("");
     }
 
     public int ratingImdbVoteCount() {
-        return ratingImdbVoteCount;
+        return Optional.ofNullable(ratingImdbVoteCount).orElse(-1);
     }
 
     public String webUrl() {
-        return webUrl;
+        return Optional.ofNullable(webUrl).orElse("");
     }
 
     public int year() {
-        return year;
+        return Optional.ofNullable(year).orElse(-1);
     }
 
     public int filmLength() {
-        return toMins(filmLength);
+        return Optional.ofNullable(toMins(filmLength)).orElse(-1);
     }
 
     public String description() {
-        return description;
+        return Optional.ofNullable(description).orElse("");
     }
 
     public filmType type() {
-        return type;
+        return Optional.ofNullable(type).orElse(filmType.UNKNOWN);
     }
 
     public String ratingMpaa() {
-        return ratingMpaa;
+        return Optional.ofNullable(ratingMpaa).orElse("");
     }
 
     public String ratingAgeLimits() {
-        return ratingAgeLimits;
+        return Optional.ofNullable(ratingAgeLimits).orElse("");
     }
 
     public boolean hasImax() {
-        return hasImax;
+        return Optional.ofNullable(hasImax).orElse(false);
     }
 
     public boolean has3D() {
-        return has3D;
+        return Optional.ofNullable(has3D).orElse(false);
     }
 
     public String lastSync() {
-        return lastSync;
+        return Optional.ofNullable(lastSync).orElse("");
     }
 
     public Genre[] genres() {
-        return genres;
+        return Optional.ofNullable(genres).orElse(new Genre[] {});
     }
 
     public Country[] countries() {
-        return countries;
+        return Optional.ofNullable(countries).orElse(new Country[] {});
     }
 
     private static int toMins(String s) {
-        String[] hourMin = s.split(":");
-        int hour = Integer.parseInt(hourMin[0]);
-        int mins = Integer.parseInt(hourMin[1]);
-        int hoursInMins = hour * 60;
-        return hoursInMins + mins;
+        if (s.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
+            String[] hourMin = s.split(":");
+            int hour = Integer.parseInt(hourMin[0]);
+            int mins = Integer.parseInt(hourMin[1]);
+            int hoursInMins = hour * 60;
+            return hoursInMins + mins;
+        } else {
+            int length = Integer.valueOf(s);
+            return length;
+        }
     }
 
     @Override

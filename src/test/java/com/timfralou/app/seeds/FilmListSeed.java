@@ -17,7 +17,7 @@ public class FilmListSeed {
         List<Film> films = new ArrayList<>();
         try {
             films = objectMapper.readValue(
-                    new File("src/main/java/com/timfralou/app/seeds/FilmList.json"),
+                    new File("src/test/java/com/timfralou/app/seeds/FilmList.json"),
                     new TypeReference<ArrayList<Film>>() {
                     });
         } catch (IOException ex) {
