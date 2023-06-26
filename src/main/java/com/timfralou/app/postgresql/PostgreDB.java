@@ -2,13 +2,12 @@ package com.timfralou.app.postgresql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import io.github.cdimascio.dotenv.Dotenv;
-
-import java.sql.ResultSet;
 
 enum dbType {
     MAIN,

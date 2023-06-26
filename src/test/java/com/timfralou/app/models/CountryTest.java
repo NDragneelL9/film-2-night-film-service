@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import com.timfralou.app.seeds.CountrySeed;
-import com.timfralou.app.seeds.FilmSeed;
 
 public class CountryTest {
     private JSONObject countryJson;

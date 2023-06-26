@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.timfralou.app.models.Film;
 import com.timfralou.app.models.Genre;
 
 import io.github.cdimascio.dotenv.Dotenv;

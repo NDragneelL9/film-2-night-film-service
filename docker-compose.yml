@@ -2,6 +2,7 @@ version: '3.7'
 services:
   WEB:
     image: tomcat:10.1.9
+    container_name: tomcat_web
     ports:
       - "8080:8080"
     volumes:
@@ -13,7 +14,8 @@ services:
         condition: service_healthy
 
   PostgreSQL:
-    image: postgres:12.15
+    image: postgres:12
+    container_name: postgres_db
     ports:
       - "5432:5432"
     environment:
