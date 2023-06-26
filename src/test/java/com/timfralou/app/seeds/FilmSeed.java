@@ -13,7 +13,7 @@ public class FilmSeed {
         Film film = new Film();
         try {
             film = objectMapper.readValue(
-                    new File("src/test/java/com/timfralou/app/seeds/Film.json"), Film.class);
+                    new File("src/test/java/com/timfralou/app/seeds/jsons/Film.json"), Film.class);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

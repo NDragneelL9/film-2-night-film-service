@@ -22,7 +22,7 @@ public class FilmTest {
         String jsonTxt = new String();
         try {
             jsonTxt = new String(
-                    Files.readAllBytes(Paths.get("src/test/java/com/timfralou/app/seeds/Film.json")));
+                    Files.readAllBytes(Paths.get("src/test/java/com/timfralou/app/seeds/jsons/Film.json")));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

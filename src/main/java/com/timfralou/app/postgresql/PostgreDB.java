@@ -40,7 +40,10 @@ public class PostgreDB {
                 this.dotenv = Dotenv.configure()
                         .filename(".env")
                         .load();
-                this.DBurl = dotenv.get("PSQL_LOCAL_TEST_URL");
+                String osName = System.getProperty("os.name");
+                boolean IS_OS_LINUX = osName.toLowerCase().startsWith("linux");
+                this.DBurl = IS_OS_LINUX ? dotenv.get("PSQL_LOCAL_LNX_TEST_URL")
+                        : dotenv.get("PSQL_LOCAL_WSL_TEST_URL");
                 this.DBuser = dotenv.get("PSQL_F2N_USER");
                 this.DBpassword = dotenv.get("PSQL_F2N_PWD");
                 break;
@@ -53,6 +56,7 @@ public class PostgreDB {
         Connection conn = connect();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sqlQuery);
+        conn.close();
         return rs;
     }
 
@@ -60,6 +64,7 @@ public class PostgreDB {
         Connection conn = connect();
         PreparedStatement stmt = conn.prepareStatement(sqlQuery);
         int rowsUpdated = stmt.executeUpdate();
+        conn.close();
         return rowsUpdated;
     }
 
