@@ -1,7 +1,3 @@
-CREATE USER f2n_admin with encrypted password 'film2night';
-
-SET ROLE f2n_admin;
-
 CREATE TYPE film_type AS ENUM (
   'FILM',
   'VIDEO',
@@ -9,18 +5,17 @@ CREATE TYPE film_type AS ENUM (
   'MINI_SERIES',
   'TV_SHOW'
 );
-
 CREATE TABLE films (
-  "id" SERIAL PRIMARY KEY,
+  film_id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "kinopoiskId" int NOT NULL UNIQUE,
-  "imbdId" int UNIQUE,
+  "imdbId" varchar UNIQUE,
   "nameRu" varchar,
   "nameEn" varchar,
   "nameOriginal" varchar,
   "reviewsCount" int,
   "ratingKinopoisk" varchar,
   "ratingKinopoiskVoteCount" int,
-  "ratingImdb" real,
+  "ratingImdb" varchar,
   "ratingImdbVoteCount" int,
   "webUrl" varchar,
   "year" int,
@@ -33,33 +28,21 @@ CREATE TABLE films (
   "has3D" bool,
   "lastSync" varchar
 );
-
 CREATE TABLE countries (
-  "id" SERIAL PRIMARY KEY,
+  country_id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "country" varchar NOT NULL UNIQUE
 );
-
 CREATE TABLE genres (
-  "id" SERIAL PRIMARY KEY,
+  genre_id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "genre" varchar NOT NULL UNIQUE
 );
-
 CREATE TABLE films_genres (
-  "film_id" int,
-  "genre_id" int,
+  film_id int REFERENCES films (film_id) ON DELETE CASCADE,
+  genre_id int REFERENCES genres (genre_id) ON DELETE CASCADE,
   CONSTRAINT films_genres_pkey PRIMARY KEY (film_id, genre_id)
 );
-
 CREATE TABLE films_countries (
-  "film_id" int,
-  "country_id" int,
+  film_id int REFERENCES films (film_id) ON DELETE CASCADE,
+  country_id int REFERENCES countries (country_id) ON DELETE CASCADE,
   CONSTRAINT films_countries_pkey PRIMARY KEY (film_id, country_id)
 );
-
-ALTER TABLE films_genres ADD FOREIGN KEY ("film_id") REFERENCES "films" ("id");
-
-ALTER TABLE films_genres ADD FOREIGN KEY ("genre_id") REFERENCES "genres" ("id");
-
-ALTER TABLE films_countries ADD FOREIGN KEY ("film_id") REFERENCES "films" ("id");
-
-ALTER TABLE films_countries ADD FOREIGN KEY ("country_id") REFERENCES "countries" ("id");

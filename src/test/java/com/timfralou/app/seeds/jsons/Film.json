@@ -1,0 +1,44 @@
+{
+    "kinopoiskId": 448,
+    "imdbId": "tt0109830",
+    "nameRu": "Форрест Гамп",
+    "nameEn": null,
+    "nameOriginal": "Forrest Gump",
+    "reviewsCount": 510,
+    "ratingKinopoisk": 8.9,
+    "ratingKinopoiskVoteCount": 828229,
+    "ratingImdb": 8.8,
+    "ratingImdbVoteCount": 2140763,
+    "webUrl": "https://www.kinopoisk.ru/film/448/",
+    "year": 1994,
+    "filmLength": 142,
+    "description": "Сидя на автобусной остановке, Форрест Гамп — не очень умный, но добрый и открытый парень — рассказывает случайным встречным историю своей необыкновенной жизни.\n\nС самого малолетства парень страдал от заболевания ног, соседские мальчишки дразнили его, но в один прекрасный день Форрест открыл в себе невероятные способности к бегу. Подруга детства Дженни всегда его поддерживала и защищала, но вскоре дороги их разошлись.",
+    "type": "FILM",
+    "ratingMpaa": "pg13",
+    "ratingAgeLimits": "age16",
+    "countries": [
+        {
+            "country": "США"
+        }
+    ],
+    "genres": [
+        {
+            "genre": "драма"
+        },
+        {
+            "genre": "мелодрама"
+        },
+        {
+            "genre": "комедия"
+        },
+        {
+            "genre": "военный"
+        },
+        {
+            "genre": "история"
+        }
+    ],
+    "hasImax": false,
+    "has3D": false,
+    "lastSync": "2023-06-16T09:46:25.332381"
+}
