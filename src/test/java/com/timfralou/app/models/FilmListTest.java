@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import com.timfralou.app.postgresql.PostgreDB;
+import com.timfralou.app.postgresql.dbType;
 import com.timfralou.app.seeds.FilmListSeed;
 
 public class FilmListTest {
@@ -23,14 +24,13 @@ public class FilmListTest {
 
     @Test
     public void saveFilmsToDB() throws SQLException {
-        String DB_TYPE = "TEST";
         FilmList filmList = new FilmList(new FilmListSeed().filmList());
-        assertEquals("Succesfully saved to " + DB_TYPE, filmList.saveToDB(DB_TYPE));
+        assertEquals("Succesfully saved to " + dbType.TEST, filmList.saveToDB(dbType.TEST));
     }
 
     @AfterAll
     public static void cleanUp() throws SQLException {
-        PostgreDB db = new PostgreDB("TEST");
+        PostgreDB db = new PostgreDB(dbType.TEST);
         db.updateQuery("DELETE FROM films");
     }
 }

@@ -9,11 +9,6 @@ import java.sql.Statement;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-enum dbType {
-    MAIN,
-    TEST,
-}
-
 public class PostgreDB {
     private Dotenv dotenv;
     private String DBurl;
@@ -24,8 +19,8 @@ public class PostgreDB {
         // keep
     }
 
-    public PostgreDB(String DB_TYPE) throws SQLException {
-        switch (dbType.valueOf(DB_TYPE)) {
+    public PostgreDB(dbType DB_TYPE) throws SQLException {
+        switch (DB_TYPE) {
             case MAIN:
                 this.dotenv = Dotenv.configure()
                         .directory("/usr/local/")

@@ -1,11 +1,9 @@
 package com.timfralou.app.servlets;
 
+import com.timfralou.app.api.KinopoiskAPI;
+import com.timfralou.app.postgresql.dbType;
+
 import java.io.*;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +24,6 @@ import jakarta.servlet.http.*;
 
 @WebServlet(urlPatterns = "/films/top-250")
 public class TopFilmsServlet extends BaseServlet {
-    private static final String TOP_250_URL = "api/v2.2/films/top?type=TOP_250_BEST_FILMS";
-    private static final String PAGE_PARAM = "&page=";
 
     public void doGet(HttpServletRequest servRequest, HttpServletResponse servResponse)
             throws IOException, ServletException {
@@ -36,23 +32,22 @@ public class TopFilmsServlet extends BaseServlet {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         }
-        String API_KEY = dotenv.get("KNPSK_API_KEY");
-        String filmsUrl = BASE_URL + TOP_250_URL + PAGE_PARAM;
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String jsonPagesCount = getFilmsPage(API_KEY, filmsUrl, 1);
+        KinopoiskAPI knpApi = new KinopoiskAPI();
+        String jsonPagesCount = knpApi.getFilmsPage(1);
         JSONObject jsonObj = new JSONObject(jsonPagesCount);
         int pagesCount = jsonObj.getInt("pagesCount");
 
         FilmList topFilms = new FilmList(new ArrayList<Film>());
         for (int i = 1; i <= pagesCount; i++) {
-            List<Film> nextfilmList = getFilmsList(objectMapper, API_KEY, filmsUrl, i);
+            List<Film> nextfilmList = getFilmsList(objectMapper, knpApi, i);
             topFilms = new FilmList(
                     Stream.concat(topFilms.filmList().stream(), nextfilmList.stream()).collect(Collectors.toList()));
         }
 
         try {
-            topFilms.saveToDB("MAIN");
+            topFilms.saveToDB(dbType.MAIN);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -61,9 +56,9 @@ public class TopFilmsServlet extends BaseServlet {
         handleResponse(servResponse, responseJSON);
     }
 
-    private List<Film> getFilmsList(ObjectMapper objectMapper, String API_KEY, String filmsUrl, int i) {
+    private List<Film> getFilmsList(ObjectMapper objectMapper, KinopoiskAPI knpApi, int i) {
         try {
-            String filmsPage = getFilmsPage(API_KEY, filmsUrl, i);
+            String filmsPage = knpApi.getFilmsPage(i);
             JSONObject jsonObj = new JSONObject(filmsPage);
             JSONArray jsonFilms = jsonObj.getJSONArray("films");
             List<Film> nextfilmList = objectMapper.readValue(jsonFilms.toString(),
@@ -74,22 +69,6 @@ public class TopFilmsServlet extends BaseServlet {
             ex.printStackTrace();
         }
         return new ArrayList<Film>();
-    }
-
-    private String getFilmsPage(String API_KEY, String url, int page) {
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .header("X-API-KEY", API_KEY)
-                    .uri(URI.create(url + page))
-                    .build();
-            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-            return response.body();
-        } catch (InterruptedException | IOException ex) {
-            ex.printStackTrace();
-            return "";
-        }
     }
 
     private void handleResponse(HttpServletResponse servResponse, String responseJSON) {
