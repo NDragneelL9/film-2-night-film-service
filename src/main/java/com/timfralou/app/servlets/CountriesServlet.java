@@ -57,8 +57,8 @@ public class CountriesServlet extends BaseServlet {
 
     private void saveToDB(List<Country> countries) throws SQLException {
         String DBurl = "jdbc:postgresql://PostgreSQL/film2night";
-        String DBuser = dotenv.get("PSQL_F2N_USER");
-        String DBpass = dotenv.get("PSQL_F2N_PWD");
+        String DBuser = super.dotenv().get("PSQL_F2N_USER");
+        String DBpass = super.dotenv().get("PSQL_F2N_PWD");
 
         Connection conn = DriverManager.getConnection(DBurl, DBuser, DBpass);
         conn.setAutoCommit(false);

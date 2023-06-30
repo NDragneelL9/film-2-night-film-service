@@ -1,12 +1,14 @@
 package com.timfralou.app.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Genre {
-    @JsonIgnore
     private long id;
     @JsonProperty("genre")
     private String genre;
@@ -27,34 +29,26 @@ public class Genre {
         return genre;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((genre == null) ? 0 : genre.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Genre other = (Genre) obj;
-        if (genre == null) {
-            if (other.genre != null)
-                return false;
-        } else if (!genre.equals(other.genre))
-            return false;
-        return true;
+    /**
+     * Saves genre to database
+     * 
+     * @param Connection conn - database connection
+     * @return int insertCount - number of inserted rows
+     */
+    public int saveToDB(Connection conn) {
+        int insertCount = -1;
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO genres (\"genre\") VALUES (?)");
+            pstmt.setString(1, genre);
+            insertCount = pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return insertCount;
     }
 
     @Override
     public String toString() {
         return "Genre [genre=" + genre + "]";
     }
-
 }

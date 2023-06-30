@@ -27,21 +27,14 @@ public class TopFilmsServlet extends BaseServlet {
 
     public void doGet(HttpServletRequest servRequest, HttpServletResponse servResponse)
             throws IOException, ServletException {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        ObjectMapper objectMapper = new ObjectMapper();
 
-        KinopoiskAPI knpApi = new KinopoiskAPI();
-        String jsonPagesCount = knpApi.getFilmsPage(1);
+        String jsonPagesCount = super.knpApi().getFilmsPage(1);
         JSONObject jsonObj = new JSONObject(jsonPagesCount);
         int pagesCount = jsonObj.getInt("pagesCount");
 
         FilmList topFilms = new FilmList(new ArrayList<Film>());
         for (int i = 1; i <= pagesCount; i++) {
-            List<Film> nextfilmList = getFilmsList(objectMapper, knpApi, i);
+            List<Film> nextfilmList = getFilmsList(super.objMapper(), super.knpApi(), i);
             topFilms = new FilmList(
                     Stream.concat(topFilms.filmList().stream(), nextfilmList.stream()).collect(Collectors.toList()));
         }
@@ -52,7 +45,7 @@ public class TopFilmsServlet extends BaseServlet {
             System.out.println(ex);
         }
 
-        String responseJSON = objectMapper.writeValueAsString(topFilms.filmList());
+        String responseJSON = super.objMapper().writeValueAsString(topFilms.filmList());
         handleResponse(servResponse, responseJSON);
     }
 
@@ -69,16 +62,5 @@ public class TopFilmsServlet extends BaseServlet {
             ex.printStackTrace();
         }
         return new ArrayList<Film>();
-    }
-
-    private void handleResponse(HttpServletResponse servResponse, String responseJSON) {
-        try {
-            servResponse.setCharacterEncoding("UTF-8");
-            servResponse.setContentType("application/json");
-            PrintWriter out = servResponse.getWriter();
-            out.println(responseJSON);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 }

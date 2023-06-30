@@ -38,7 +38,7 @@ public class FilmList {
 
     public String saveToDB(dbType DB_TYPE) throws SQLException {
         PostgreDB db = new PostgreDB(DB_TYPE);
-        Connection conn = db.connect();
+        Connection conn = db.conn();
         conn.setAutoCommit(false);
 
         insertFilms(conn);
