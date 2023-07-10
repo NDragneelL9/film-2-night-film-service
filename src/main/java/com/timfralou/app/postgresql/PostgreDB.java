@@ -35,10 +35,7 @@ public class PostgreDB {
                         .load();
                 this.DBuser = dotenv.get("PSQL_F2N_USER");
                 this.DBpassword = dotenv.get("PSQL_F2N_PWD");
-                String osName = System.getProperty("os.name");
-                boolean IS_OS_LINUX = osName.toLowerCase().startsWith("linux");
-                this.DBurl = IS_OS_LINUX ? dotenv.get("PSQL_LOCAL_LNX_TEST_URL")
-                        : dotenv.get("PSQL_LOCAL_WSL_TEST_URL");
+                this.DBurl = dotenv.get("PSQL_LOCAL_TEST_URL");
                 break;
             default:
                 System.out.println("Invalid DB TYPE");
