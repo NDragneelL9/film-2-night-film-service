@@ -1,5 +1,8 @@
 package com.timfralou.app.models;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -178,14 +181,80 @@ public class Film {
         }
     }
 
-    @Override
-    public int hashCode() {
-        return nameRu.hashCode();
+    /**
+     * Saves film to database
+     * 
+     * @param Connection conn - database connection
+     * @return int insertCount - number of inserted rows
+     */
+    public int saveToDB(Connection conn) {
+        int insertCount = -1;
+        try {
+            PreparedStatement pstmt = conn
+                    .prepareStatement(
+                            "INSERT INTO films (\"kinopoiskId\", \"imdbId\", \"nameEn\", \"nameOriginal\", \"reviewsCount\","
+                                    +
+                                    " \"ratingImdb\", \"ratingImdbVoteCount\", \"webUrl\", \"description\", \"type\"," +
+                                    " \"ratingMpaa\", \"ratingAgeLimits\", \"hasImax\", \"has3D\", \"lastSync\")"
+                                    +
+                                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            pstmt.setInt(1, kinopoiskId);
+            pstmt.setString(2, imdbId);
+            pstmt.setString(3, nameEn);
+            pstmt.setString(4, nameOriginal);
+            pstmt.setInt(5, reviewsCount);
+            pstmt.setString(6, ratingImdb);
+            pstmt.setInt(7, ratingImdbVoteCount);
+            pstmt.setString(8, webUrl);
+            pstmt.setString(9, description);
+            pstmt.setObject(10, type, java.sql.Types.OTHER);
+            pstmt.setString(11, ratingMpaa);
+            pstmt.setString(12, ratingAgeLimits);
+            pstmt.setBoolean(13, hasImax);
+            pstmt.setBoolean(14, has3D);
+            pstmt.setString(15, lastSync);
+            insertCount = pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return insertCount;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return nameRu.equals(((Film) obj).nameRu);
+    /**
+     * Saves genre to database
+     * 
+     * @param Connection conn - database connection
+     * @return int affectedrows - number of updated rows
+     */
+    public int updateInDB(Connection conn) {
+        int affectedrows = -1;
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE films SET \"nameEn\" = ?, \"nameOriginal\" = ?, \"reviewsCount\" = ?, " +
+                            "\"ratingImdb\" = ?, \"ratingImdbVoteCount\" = ?, \"webUrl\" = ?, \"description\" = ?, \"type\" = ?, "
+                            +
+                            "\"ratingMpaa\" = ?, \"ratingAgeLimits\" = ?, \"hasImax\" = ?, \"has3D\" = ?, \"lastSync\" = ? "
+                            +
+                            "WHERE \"kinopoiskId\" = ?");
+            pstmt.setString(1, nameEn);
+            pstmt.setString(2, nameOriginal);
+            pstmt.setInt(3, reviewsCount);
+            pstmt.setString(4, ratingImdb);
+            pstmt.setInt(5, ratingImdbVoteCount);
+            pstmt.setString(6, webUrl);
+            pstmt.setString(7, description);
+            pstmt.setObject(8, type, java.sql.Types.OTHER);
+            pstmt.setString(9, ratingMpaa);
+            pstmt.setString(10, ratingAgeLimits);
+            pstmt.setBoolean(11, hasImax);
+            pstmt.setBoolean(12, has3D);
+            pstmt.setString(13, lastSync);
+            pstmt.setInt(14, kinopoiskId);
+            affectedrows = pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return affectedrows;
     }
 
     @Override
