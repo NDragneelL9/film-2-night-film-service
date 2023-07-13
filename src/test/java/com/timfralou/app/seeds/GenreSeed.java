@@ -11,14 +11,13 @@ public class GenreSeed {
 
     public GenreSeed() {
         ObjectMapper objectMapper = new ObjectMapper();
-        Genre genre = new Genre();
         try {
-            genre = objectMapper.readValue(
+            Genre genre = objectMapper.readValue(
                     new File("src/test/java/com/timfralou/app/seeds/jsons/Genre.json"), Genre.class);
+            this.genre = genre;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        this.genre = genre;
     }
 
     public Genre genre() {

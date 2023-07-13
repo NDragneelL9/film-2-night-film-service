@@ -2,6 +2,8 @@ package com.timfralou.app.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timfralou.app.api.KinopoiskAPI;
@@ -22,20 +24,22 @@ public class BaseServlet extends HttpServlet {
             .load();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final KinopoiskAPI knpApi = new KinopoiskAPI();
-    private PostgreDB db;
+    private Connection dbConn;
     public static final int BATCH_SIZE = 20;
 
     public void init() throws ServletException {
         try {
             Class.forName("org.postgresql.Driver");
-            this.db = new PostgreDB(dbType.MAIN);
-        } catch (ClassNotFoundException ex) {
+            Dotenv dockerEnv = Dotenv.configure().directory("/usr/local/").filename("env").load();
+            PostgreDB db = new PostgreDB(dbType.MAIN, dockerEnv);
+            this.dbConn = db.connect();
+        } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    public PostgreDB postgres() {
-        return db;
+    public Connection dbConn() {
+        return dbConn;
     }
 
     public KinopoiskAPI knpApi() {

@@ -18,13 +18,19 @@ public class GenresServlet extends BaseServlet {
     public void doPut(HttpServletRequest servRequest, HttpServletResponse servResponse)
             throws IOException, ServletException {
 
+        String responseJSON = "";
         String jsonFilters = super.knpApi().getFilmFilters();
-        JSONArray jsonArrGenres = new JSONObject(jsonFilters).getJSONArray("genres");
-        Genre[] genres = super.objMapper().readValue(jsonArrGenres.toString(), Genre[].class);
-        for (Genre genre : genres) {
-            genre.saveToDB(super.postgres().conn());
+        JSONObject jsonObj = new JSONObject(jsonFilters);
+        if (jsonObj.has("message")) {
+            responseJSON = super.objMapper().writeValueAsString(jsonObj.getString("message"));
+        } else {
+            JSONArray jsonArrGenres = jsonObj.getJSONArray("genres");
+            Genre[] genres = super.objMapper().readValue(jsonArrGenres.toString(), Genre[].class);
+            for (Genre genre : genres) {
+                genre.saveToDB(super.dbConn());
+            }
+            responseJSON = super.objMapper().writeValueAsString(genres);
         }
-        String responseJSON = super.objMapper().writeValueAsString(genres);
         handleResponse(servResponse, responseJSON);
     }
 }

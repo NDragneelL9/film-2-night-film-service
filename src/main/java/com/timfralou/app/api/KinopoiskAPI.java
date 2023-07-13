@@ -10,35 +10,34 @@ import java.net.http.HttpResponse.BodyHandlers;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class KinopoiskAPI {
-    private final String BASE_URL = "https://kinopoiskapiunofficial.tech/";
-    private final String TOP_250_URL = "api/v2.2/films/top?type=TOP_250_BEST_FILMS";
-    private final String FILTERS_URL = "api/v2.2/films/filters";
-    private final String FILM_URL = "api/v2.2/films/";
-    private final String PAGE_PARAM = "&page=";
-    private final Dotenv dotenv = Dotenv.configure()
-            .directory("/usr/local/")
-            .filename("env")
-            .load();
-    private final String API_KEY = dotenv.get("KNPSK_API_KEY");
+    private final KinopoiskUrls urls;
+    private final Dotenv dotenv;
+    private final String API_KEY;
+
+    public KinopoiskAPI() {
+        this.urls = new KinopoiskUrls();
+        this.dotenv = Dotenv.configure()
+                .directory("/usr/local/")
+                .filename("env")
+                .load();
+        this.API_KEY = dotenv.get("KNPSK_API_KEY");
+    }
 
     public String getFilmsPage(int page) {
-        String url = BASE_URL + TOP_250_URL + PAGE_PARAM + page;
-        return sendRequest(url);
+        return sendGETRequest(urls.topFilmsURL() + page);
     }
 
     public String getFilmFilters() {
-        String url = BASE_URL + FILTERS_URL;
-        return sendRequest(url);
+        return sendGETRequest(urls.filmFiltersURL());
     }
 
     public String getFilm(String pathInfo) {
         String[] pathParts = pathInfo.split("/");
         String filmId = pathParts[1];
-        String url = BASE_URL + FILM_URL + filmId;
-        return sendRequest(url);
+        return sendGETRequest(urls.filmURL() + filmId);
     }
 
-    private String sendRequest(String url) {
+    private String sendGETRequest(String url) {
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()

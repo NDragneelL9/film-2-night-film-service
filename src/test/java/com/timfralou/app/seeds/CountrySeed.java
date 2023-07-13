@@ -11,14 +11,13 @@ public class CountrySeed {
 
     public CountrySeed() {
         ObjectMapper objectMapper = new ObjectMapper();
-        Country country = new Country();
         try {
-            country = objectMapper.readValue(
+            Country country = objectMapper.readValue(
                     new File("src/test/java/com/timfralou/app/seeds/jsons/Country.json"), Country.class);
+            this.country = country;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        this.country = country;
     }
 
     public Country country() {
