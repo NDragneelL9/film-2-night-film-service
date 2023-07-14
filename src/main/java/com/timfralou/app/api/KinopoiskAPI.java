@@ -11,15 +11,10 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class KinopoiskAPI {
     private final KinopoiskUrls urls;
-    private final Dotenv dotenv;
     private final String API_KEY;
 
-    public KinopoiskAPI() {
+    public KinopoiskAPI(Dotenv dotenv) {
         this.urls = new KinopoiskUrls();
-        this.dotenv = Dotenv.configure()
-                .directory("/usr/local/")
-                .filename("env")
-                .load();
         this.API_KEY = dotenv.get("KNPSK_API_KEY");
     }
 

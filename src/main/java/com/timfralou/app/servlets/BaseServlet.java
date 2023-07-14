@@ -11,6 +11,7 @@ import com.timfralou.app.postgresql.PostgreDB;
 import com.timfralou.app.postgresql.dbType;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import io.github.cdimascio.dotenv.DotenvEntry;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,20 +19,32 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet
 public class BaseServlet extends HttpServlet {
-    private final Dotenv dotenv = Dotenv.configure()
-            .directory("/usr/local/")
-            .filename("env")
-            .load();
+    private Dotenv dotenv;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final KinopoiskAPI knpApi = new KinopoiskAPI();
+    private KinopoiskAPI knpApi;;
     private Connection dbConn;
     public static final int BATCH_SIZE = 20;
 
-    public void init() throws ServletException {
+    public void init() {
         try {
             Class.forName("org.postgresql.Driver");
-            Dotenv dockerEnv = Dotenv.configure().directory("/usr/local/").filename("env").load();
-            PostgreDB db = new PostgreDB(dbType.MAIN, dockerEnv);
+            Dotenv dockerEnv = Dotenv.configure()
+                    .directory("/usr/local/")
+                    .filename("env")
+                    .ignoreIfMissing()
+                    .load();
+            Dotenv testEnv = Dotenv.configure()
+                    .filename(".env.test")
+                    .load();
+            PostgreDB db;
+            if (!dockerEnv.get("KNPSK_API_KEY", "").isEmpty()) {
+                this.dotenv = dockerEnv;
+                db = new PostgreDB(dbType.MAIN, dotenv);
+            } else {
+                this.dotenv = testEnv;
+                db = new PostgreDB(dbType.TEST, dotenv);
+            }
+            this.knpApi = new KinopoiskAPI(dotenv);
             this.dbConn = db.connect();
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
@@ -59,7 +72,7 @@ public class BaseServlet extends HttpServlet {
             servResponse.setCharacterEncoding("UTF-8");
             servResponse.setContentType("application/json");
             PrintWriter out = servResponse.getWriter();
-            out.println(responseJSON);
+            out.write(responseJSON);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
