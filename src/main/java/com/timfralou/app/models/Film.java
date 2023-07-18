@@ -98,34 +98,16 @@ public class Film {
         try {
             PreparedStatement pstmt = conn
                     .prepareStatement(
-                            "INSERT INTO films (\"kinopoiskId\", \"nameRu\", \"ratingKinopoisk\"," +
+                            "INSERT INTO films (\"nameRu\", \"ratingKinopoisk\"," +
                                     "\"ratingKinopoiskVoteCount\", \"year\", \"filmLength\"," +
                                     "\"imdbId\", \"nameEn\", \"nameOriginal\", \"reviewsCount\"," +
                                     " \"ratingImdb\", \"ratingImdbVoteCount\", \"webUrl\", \"description\", \"type\"," +
-                                    " \"ratingMpaa\", \"ratingAgeLimits\", \"hasImax\", \"has3D\", \"lastSync\")" +
+                                    " \"ratingMpaa\", \"ratingAgeLimits\", \"hasImax\", \"has3D\", \"lastSync\", \"kinopoiskId\")"
+                                    +
                                     " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
                                     " ON CONFLICT (\"kinopoiskId\") DO NOTHING;");
-            pstmt.setInt(1, kinopoiskId);
-            pstmt.setString(2, nameRu);
-            pstmt.setString(3, ratingKinopoisk);
-            pstmt.setInt(4, ratingKinopoiskVoteCount);
-            pstmt.setInt(5, year);
-            pstmt.setInt(6, toMins(filmLength));
-            pstmt.setString(7, imdbId);
-            pstmt.setString(8, nameEn);
-            pstmt.setString(9, nameOriginal);
-            pstmt.setInt(10, reviewsCount);
-            pstmt.setString(11, ratingImdb);
-            pstmt.setInt(12, ratingImdbVoteCount);
-            pstmt.setString(13, webUrl);
-            pstmt.setString(14, description);
-            pstmt.setObject(15, type, java.sql.Types.OTHER);
-            pstmt.setString(16, ratingMpaa);
-            pstmt.setString(17, ratingAgeLimits);
-            pstmt.setBoolean(18, hasImax);
-            pstmt.setBoolean(19, has3D);
-            pstmt.setString(20, lastSync);
-            int insertCount = pstmt.executeUpdate();
+            PreparedStatement completedPstmt = setParams(pstmt);
+            int insertCount = completedPstmt.executeUpdate();
             if (countries != null) {
                 for (Country country : countries) {
                     country.saveFilmRelationToDB(conn, kinopoiskId);
@@ -159,31 +141,37 @@ public class Film {
                             " \"type\" = ?,\"ratingMpaa\" = ?, \"ratingAgeLimits\" = ?, \"hasImax\" = ?," +
                             " \"has3D\" = ?, \"lastSync\" = ?" +
                             " WHERE \"kinopoiskId\" = ?;");
-            pstmt.setString(1, nameRu);
-            pstmt.setString(2, ratingKinopoisk);
-            pstmt.setInt(3, ratingKinopoiskVoteCount);
-            pstmt.setInt(4, year);
-            pstmt.setInt(5, toMins(filmLength));
-            pstmt.setString(6, imdbId);
-            pstmt.setString(7, nameEn == null ? nameOriginal : nameEn);
-            pstmt.setString(8, nameOriginal == null ? nameEn : nameOriginal);
-            pstmt.setInt(9, reviewsCount);
-            pstmt.setString(10, ratingImdb);
-            pstmt.setInt(11, ratingImdbVoteCount);
-            pstmt.setString(12, webUrl);
-            pstmt.setString(13, description);
-            pstmt.setObject(14, type, java.sql.Types.OTHER);
-            pstmt.setString(15, ratingMpaa);
-            pstmt.setString(16, ratingAgeLimits);
-            pstmt.setBoolean(17, hasImax);
-            pstmt.setBoolean(18, has3D);
-            pstmt.setString(19, lastSync);
-            pstmt.setInt(20, kinopoiskId);
-            return pstmt.executeUpdate();
+            PreparedStatement completedPstmt = setParams(pstmt);
+            int affectedrows = completedPstmt.executeUpdate();
+            return affectedrows;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return 0;
+    }
+
+    private PreparedStatement setParams(PreparedStatement pstmt) throws SQLException {
+        pstmt.setString(1, nameRu);
+        pstmt.setString(2, ratingKinopoisk);
+        pstmt.setInt(3, ratingKinopoiskVoteCount);
+        pstmt.setInt(4, year);
+        pstmt.setInt(5, toMins(filmLength));
+        pstmt.setString(6, imdbId);
+        pstmt.setString(7, nameEn == null ? nameOriginal : nameEn);
+        pstmt.setString(8, nameOriginal == null ? nameEn : nameOriginal);
+        pstmt.setInt(9, reviewsCount);
+        pstmt.setString(10, ratingImdb);
+        pstmt.setInt(11, ratingImdbVoteCount);
+        pstmt.setString(12, webUrl);
+        pstmt.setString(13, description);
+        pstmt.setObject(14, type, java.sql.Types.OTHER);
+        pstmt.setString(15, ratingMpaa);
+        pstmt.setString(16, ratingAgeLimits);
+        pstmt.setBoolean(17, hasImax);
+        pstmt.setBoolean(18, has3D);
+        pstmt.setString(19, lastSync);
+        pstmt.setInt(20, kinopoiskId);
+        return pstmt;
     }
 
     @Override
