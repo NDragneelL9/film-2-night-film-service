@@ -10,11 +10,10 @@ import java.net.http.HttpResponse.BodyHandlers;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class KinopoiskAPI {
-    private final KinopoiskUrls urls;
+    private final KinopoiskUrls urls = new KinopoiskUrls();
     private final String API_KEY;
 
     public KinopoiskAPI(Dotenv dotenv) {
-        this.urls = new KinopoiskUrls();
         this.API_KEY = dotenv.get("KNPSK_API_KEY");
     }
 
