@@ -27,16 +27,16 @@ public class Country {
      * @return int insertCount - number of inserted rows
      */
     public int saveToDB(Connection conn) {
-        int insertCount = -1;
         try {
             PreparedStatement pstmt = conn.prepareStatement(
                     "INSERT INTO countries (\"country\") VALUES (?) ON CONFLICT (\"country\") DO NOTHING;");
             pstmt.setString(1, country);
-            insertCount = pstmt.executeUpdate();
+            int insertCount = pstmt.executeUpdate();
+            return insertCount;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return insertCount;
+        return 0;
     }
 
     /**
@@ -51,16 +51,16 @@ public class Country {
                 " SELECT f.film_id, c.country_id FROM films as f, countries as c" +
                 " WHERE f.\"kinopoiskId\" = ? AND c.\"country\" = ?" +
                 " ON CONFLICT (film_id, country_id) DO NOTHING;";
-        int insertCount = -1;
         try {
             PreparedStatement pstmt = conn.prepareStatement(INSERT_FILMS_COUNTRIES);
             pstmt.setInt(1, kinopoiskId);
             pstmt.setString(2, country);
-            pstmt.executeUpdate();
+            int insertCount = pstmt.executeUpdate();
+            return insertCount;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return insertCount;
+        return 0;
     }
 
     @Override
