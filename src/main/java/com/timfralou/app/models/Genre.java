@@ -27,16 +27,16 @@ public class Genre {
      * @return int insertCount - number of inserted rows
      */
     public int saveToDB(Connection conn) {
-        int insertCount = 0;
         try {
             PreparedStatement pstmt = conn
                     .prepareStatement("INSERT INTO genres (\"genre\") VALUES (?) ON CONFLICT (\"genre\") DO NOTHING;");
             pstmt.setString(1, genre);
-            insertCount = pstmt.executeUpdate();
+            int insertCount = pstmt.executeUpdate();
+            return insertCount;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return insertCount;
+        return 0;
     }
 
     /**
@@ -51,16 +51,16 @@ public class Genre {
                 " SELECT f.film_id, g.genre_id FROM films as f, genres as g" +
                 " WHERE f.\"kinopoiskId\" = ? AND g.\"genre\" = ?" +
                 " ON CONFLICT (film_id, genre_id) DO NOTHING;";
-        int insertCount = 0;
         try {
             PreparedStatement pstmt = conn.prepareStatement(INSERT_FILMS_GENRES);
             pstmt.setInt(1, kinopoiskId);
             pstmt.setString(2, genre);
-            pstmt.executeUpdate();
+            int affectedrows = pstmt.executeUpdate();
+            return affectedrows;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return insertCount;
+        return 0;
     }
 
     @Override
