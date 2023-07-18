@@ -95,7 +95,6 @@ public class Film {
      * @return int insertCount - number of inserted rows
      */
     public int saveToDB(Connection conn) {
-        int insertCount = 0;
         try {
             PreparedStatement pstmt = conn
                     .prepareStatement(
@@ -126,7 +125,7 @@ public class Film {
             pstmt.setBoolean(18, hasImax);
             pstmt.setBoolean(19, has3D);
             pstmt.setString(20, lastSync);
-            insertCount = pstmt.executeUpdate();
+            int insertCount = pstmt.executeUpdate();
             if (countries != null) {
                 for (Country country : countries) {
                     country.saveFilmRelationToDB(conn, kinopoiskId);
@@ -137,10 +136,11 @@ public class Film {
                     genre.saveFilmRelationToDB(conn, kinopoiskId);
                 }
             }
+            return insertCount;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return insertCount;
+        return 0;
     }
 
     /**
@@ -150,7 +150,6 @@ public class Film {
      * @return int affectedrows - number of updated rows
      */
     public int updateInDB(Connection conn) {
-        int affectedrows = 0;
         try {
             PreparedStatement pstmt = conn.prepareStatement(
                     "UPDATE films SET \"nameRu\" = ?, \"ratingKinopoisk\" = ?, \"ratingKinopoiskVoteCount\" = ?," +
@@ -180,11 +179,11 @@ public class Film {
             pstmt.setBoolean(18, has3D);
             pstmt.setString(19, lastSync);
             pstmt.setInt(20, kinopoiskId);
-            affectedrows = pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return affectedrows;
+        return 0;
     }
 
     @Override
