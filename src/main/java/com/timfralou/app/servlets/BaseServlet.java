@@ -11,15 +11,12 @@ import com.timfralou.app.postgresql.PostgreDB;
 import com.timfralou.app.postgresql.dbType;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import io.github.cdimascio.dotenv.DotenvEntry;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet
 public class BaseServlet extends HttpServlet {
-    private Dotenv dotenv;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private KinopoiskAPI knpApi;;
     private Connection dbConn;
@@ -36,13 +33,14 @@ public class BaseServlet extends HttpServlet {
             Dotenv testEnv = Dotenv.configure()
                     .filename(".env.test")
                     .load();
+            Dotenv dotenv;
             PostgreDB db;
             if (!dockerEnv.get("KNPSK_API_KEY", "").isEmpty()) {
-                this.dotenv = dockerEnv;
-                db = new PostgreDB(dbType.MAIN, dotenv);
+                db = new PostgreDB(dbType.MAIN, dockerEnv);
+                dotenv = dockerEnv;
             } else {
-                this.dotenv = testEnv;
-                db = new PostgreDB(dbType.TEST, dotenv);
+                db = new PostgreDB(dbType.TEST, testEnv);
+                dotenv = testEnv;
             }
             this.knpApi = new KinopoiskAPI(dotenv);
             this.dbConn = db.connect();
@@ -61,10 +59,6 @@ public class BaseServlet extends HttpServlet {
 
     public ObjectMapper objMapper() {
         return objectMapper;
-    }
-
-    public Dotenv dotenv() {
-        return dotenv;
     }
 
     public void handleResponse(HttpServletResponse servResponse, String responseJSON) {
