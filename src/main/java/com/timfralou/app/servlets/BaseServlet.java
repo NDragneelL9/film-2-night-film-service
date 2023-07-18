@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timfralou.app.api.KinopoiskAPI;
 import com.timfralou.app.postgresql.PostgreDB;
 import com.timfralou.app.postgresql.dbType;
-
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

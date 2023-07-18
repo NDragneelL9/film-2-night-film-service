@@ -1,11 +1,8 @@
 package com.timfralou.app.servlets;
 
 import java.io.*;
-
 import org.json.JSONObject;
-
 import com.timfralou.app.models.Film;
-
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 

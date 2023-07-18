@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -108,16 +107,7 @@ public class Film {
                                     " ON CONFLICT (\"kinopoiskId\") DO NOTHING;");
             PreparedStatement completedPstmt = setParams(pstmt);
             int insertCount = completedPstmt.executeUpdate();
-            if (countries != null) {
-                for (Country country : countries) {
-                    country.saveFilmRelationToDB(conn, kinopoiskId);
-                }
-            }
-            if (genres != null) {
-                for (Genre genre : genres) {
-                    genre.saveFilmRelationToDB(conn, kinopoiskId);
-                }
-            }
+            saveAssociatedCountriesGenres(conn);
             return insertCount;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -150,6 +140,31 @@ public class Film {
         return 0;
     }
 
+    /**
+     * Saves associated with this film countries and genres
+     * 
+     * @param Connection conn - database connection
+     * @return int insertedRows - number of inserted rows
+     */
+    private void saveAssociatedCountriesGenres(Connection conn) {
+        if (countries != null) {
+            for (Country country : countries) {
+                country.saveFilmRelationToDB(conn, kinopoiskId);
+            }
+        }
+        if (genres != null) {
+            for (Genre genre : genres) {
+                genre.saveFilmRelationToDB(conn, kinopoiskId);
+            }
+        }
+    }
+
+    /**
+     * Adds params to PreparedStatement
+     * 
+     * @param PreparedStatement pstmt - PreparedStatement
+     * @return PreparedStatement pstmt - preparedStatement with params
+     */
     private PreparedStatement setParams(PreparedStatement pstmt) throws SQLException {
         pstmt.setString(1, nameRu);
         pstmt.setString(2, ratingKinopoisk);

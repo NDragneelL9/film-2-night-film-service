@@ -6,12 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.timfralou.app.models.Film;
-
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 

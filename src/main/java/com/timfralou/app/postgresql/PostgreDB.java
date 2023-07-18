@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class PostgreDB {

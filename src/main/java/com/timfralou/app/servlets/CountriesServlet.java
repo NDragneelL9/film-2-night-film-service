@@ -1,13 +1,9 @@
 package com.timfralou.app.servlets;
 
 import java.io.IOException;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.timfralou.app.models.Country;
-
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
