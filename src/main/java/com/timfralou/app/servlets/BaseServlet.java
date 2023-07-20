@@ -30,6 +30,7 @@ public class BaseServlet extends HttpServlet {
                     .load();
             Dotenv testEnv = Dotenv.configure()
                     .filename(".env.test")
+                    .ignoreIfMissing()
                     .load();
             Dotenv dotenv;
             PostgreDB db;

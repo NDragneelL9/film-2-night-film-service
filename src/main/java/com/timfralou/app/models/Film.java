@@ -61,6 +61,33 @@ public class Film {
     @JsonProperty("countries")
     private Country[] countries;
 
+    public Film(String nameRu, String ratingKinopoisk,
+            int ratingKinopoiskVoteCount, int year,
+            int filmLength, String imdbId, String nameEn,
+            String nameOriginal, int reviewsCount,
+            String ratingImdb, int ratingImdbVoteCount,
+            String webUrl, String description, String type,
+            String ratingMpaa, String ratingAgeLimits,
+            Boolean hasImax, Boolean has3D, String lastSync, int kinopoiskId) {
+        this.nameRu = nameRu;
+        this.ratingKinopoisk = ratingKinopoisk;
+        this.ratingKinopoiskVoteCount = ratingKinopoiskVoteCount;
+        this.year = year;
+        this.filmLength = Integer.toString(filmLength);
+        this.nameOriginal = nameOriginal;
+        this.reviewsCount = reviewsCount;
+        this.ratingImdb = ratingImdb;
+        this.ratingImdbVoteCount = ratingImdbVoteCount;
+        this.description = description;
+        this.type = filmType.valueOf(type);
+        this.ratingMpaa = ratingMpaa;
+        this.ratingAgeLimits = ratingAgeLimits;
+        this.hasImax = hasImax;
+        this.has3D = has3D;
+        this.lastSync = lastSync;
+        this.kinopoiskId = kinopoiskId;
+    };
+
     public Film() {
         // need for Jackson
     }

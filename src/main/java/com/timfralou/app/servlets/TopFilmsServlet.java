@@ -9,11 +9,19 @@ import java.util.stream.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.timfralou.app.models.Film;
+import com.timfralou.app.models.TopFilms;
+
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 @WebServlet(urlPatterns = "/films/top-250")
 public class TopFilmsServlet extends BaseServlet {
+
+    public void doGet(HttpServletRequest servRequest, HttpServletResponse servResponse) {
+        TopFilms topFilms = new TopFilms(dbConn());
+        String responseJSON = topFilms.filmList();
+        handleResponse(servResponse, responseJSON);
+    }
 
     public void doPut(HttpServletRequest servRequest, HttpServletResponse servResponse) {
         try {

@@ -7,9 +7,6 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.SQLException;
-
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import com.timfralou.app.BasicTest;
