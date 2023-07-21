@@ -3,6 +3,7 @@ package com.timfralou.app.models;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.SQLException;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import com.timfralou.app.BasicTest;
@@ -12,7 +13,7 @@ public class TopFilmsTest extends BasicTest {
     private TopFilms topFilms;
 
     @Test
-    public void checksCtor() {
+    public void checksFilmList() {
         Film[] films = new FilmSeed().films();
         try {
             for (Film film : films) {
@@ -23,5 +24,11 @@ public class TopFilmsTest extends BasicTest {
             ex.printStackTrace();
         }
         assertTrue(topFilms.filmList().toString().contains("kinopoiskId"));
+    }
+
+    @AfterAll
+    public static void cleanUp() throws SQLException {
+        // film.delete() - deletes from db
+        dbTEST.updateQuery("DELETE FROM films");
     }
 }
