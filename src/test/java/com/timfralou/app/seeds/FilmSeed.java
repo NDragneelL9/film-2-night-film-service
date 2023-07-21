@@ -33,4 +33,9 @@ public class FilmSeed {
     public Film filmInHHMM() {
         return filmInHHMM;
     }
+
+    public Film[] films() {
+        Film[] films = { film, filmInHHMM };
+        return films;
+    }
 }
