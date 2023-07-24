@@ -40,6 +40,7 @@ public class TopFilmsServlet extends BaseServlet {
                     Film[] films = super.objMapper().readValue(jsonFilms.toString(), Film[].class);
                     for (Film film : films) {
                         film.saveToDB(super.dbConn());
+                        film.downloadPoster();
                     }
                     topFilms = Stream.concat(topFilms.stream(), Arrays.stream(films)).collect(Collectors.toList());
 

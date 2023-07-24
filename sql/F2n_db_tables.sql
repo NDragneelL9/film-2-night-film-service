@@ -12,6 +12,7 @@ CREATE TABLE films (
   "nameRu" varchar,
   "nameEn" varchar,
   "nameOriginal" varchar,
+  "posterUrl" varchar,
   "reviewsCount" int,
   "ratingKinopoisk" varchar,
   "ratingKinopoiskVoteCount" int,

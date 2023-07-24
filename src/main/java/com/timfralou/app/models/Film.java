@@ -1,5 +1,7 @@
 package com.timfralou.app.models;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -24,6 +26,8 @@ public class Film {
     private String nameEn;
     @JsonProperty("nameOriginal")
     private String nameOriginal;
+    @JsonProperty("posterUrl")
+    private String posterUrl;
     @JsonProperty("reviewsCount")
     private int reviewsCount;
     @JsonProperty("ratingKinopoisk")
@@ -64,7 +68,7 @@ public class Film {
     public Film(String nameRu, String ratingKinopoisk,
             int ratingKinopoiskVoteCount, int year,
             int filmLength, String imdbId, String nameEn,
-            String nameOriginal, int reviewsCount,
+            String nameOriginal, String posterUrl, int reviewsCount,
             String ratingImdb, int ratingImdbVoteCount,
             String webUrl, String description, String type,
             String ratingMpaa, String ratingAgeLimits,
@@ -75,6 +79,7 @@ public class Film {
         this.year = year;
         this.filmLength = Integer.toString(filmLength);
         this.nameOriginal = nameOriginal;
+        this.posterUrl = posterUrl;
         this.reviewsCount = reviewsCount;
         this.ratingImdb = ratingImdb;
         this.ratingImdbVoteCount = ratingImdbVoteCount;
@@ -125,12 +130,13 @@ public class Film {
             PreparedStatement pstmt = conn
                     .prepareStatement(
                             "INSERT INTO films (\"nameRu\", \"ratingKinopoisk\"," +
-                                    "\"ratingKinopoiskVoteCount\", \"year\", \"filmLength\"," +
-                                    "\"imdbId\", \"nameEn\", \"nameOriginal\", \"reviewsCount\"," +
+                                    " \"ratingKinopoiskVoteCount\", \"year\", \"filmLength\"," +
+                                    " \"imdbId\", \"nameEn\", \"nameOriginal\", \"reviewsCount\"," +
                                     " \"ratingImdb\", \"ratingImdbVoteCount\", \"webUrl\", \"description\", \"type\"," +
-                                    " \"ratingMpaa\", \"ratingAgeLimits\", \"hasImax\", \"has3D\", \"lastSync\", \"kinopoiskId\")"
+                                    " \"ratingMpaa\", \"ratingAgeLimits\", \"hasImax\", \"has3D\", \"lastSync\"," +
+                                    " \"posterUrl\", \"kinopoiskId\")"
                                     +
-                                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+                                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
                                     " ON CONFLICT (\"kinopoiskId\") DO NOTHING;");
             PreparedStatement completedPstmt = setParams(pstmt);
             int insertCount = completedPstmt.executeUpdate();
@@ -156,7 +162,7 @@ public class Film {
                             " \"nameOriginal\" = ?, \"reviewsCount\" = ?, \"ratingImdb\" = ?," +
                             " \"ratingImdbVoteCount\" = ?, \"webUrl\" = ?, \"description\" = ?," +
                             " \"type\" = ?,\"ratingMpaa\" = ?, \"ratingAgeLimits\" = ?, \"hasImax\" = ?," +
-                            " \"has3D\" = ?, \"lastSync\" = ?" +
+                            " \"has3D\" = ?, \"lastSync\" = ?, \"posterUrl\" = ?" +
                             " WHERE \"kinopoiskId\" = ?;");
             PreparedStatement completedPstmt = setParams(pstmt);
             int affectedrows = completedPstmt.executeUpdate();
@@ -212,8 +218,23 @@ public class Film {
         pstmt.setBoolean(17, hasImax);
         pstmt.setBoolean(18, has3D);
         pstmt.setString(19, lastSync);
-        pstmt.setInt(20, kinopoiskId);
+        pstmt.setString(20, posterUrl);
+        pstmt.setInt(21, kinopoiskId);
         return pstmt;
+    }
+
+    public void downloadPoster() {
+        try {
+            URLFile poster = new URLFile(new URL(posterUrl), kinopoiskId + ".jpg");
+            poster.save();
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deletePoster() {
+        URLFile poster = new URLFile(kinopoiskId + ".jpg");
+        poster.delete();
     }
 
     @Override

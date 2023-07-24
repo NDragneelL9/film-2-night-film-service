@@ -43,6 +43,7 @@ public class TopFilms {
         String imdbId = rs.getString("imdbId");
         String nameEn = rs.getString("nameEn");
         String nameOriginal = rs.getString("nameOriginal");
+        String posterUrl = rs.getString("posterUrl");
         int reviewsCount = rs.getInt("reviewsCount");
         String ratingImdb = rs.getString("ratingImdb");
         int ratingImdbVoteCount = rs.getInt("ratingImdbVoteCount");
@@ -58,7 +59,7 @@ public class TopFilms {
         Film film = new Film(nameRu, ratingKinopoisk,
                 ratingKinopoiskVoteCount, year,
                 filmLength, imdbId, nameEn,
-                nameOriginal, reviewsCount,
+                nameOriginal, posterUrl, reviewsCount,
                 ratingImdb, ratingImdbVoteCount,
                 webUrl, description, type,
                 ratingMpaa, ratingAgeLimits,
