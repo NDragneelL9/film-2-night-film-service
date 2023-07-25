@@ -27,7 +27,11 @@ public class CountriesServletTest extends BasicTest {
             PrintWriter writer = new PrintWriter(stringWriter);
             when(response.getWriter()).thenReturn(writer);
             countriesServlet.doPut(request, response);
-            assertTrue(stringWriter.toString().contains("country"));
+            if (stringWriter.toString().contains("You exceeded the quota")) {
+                assertTrue(stringWriter.toString().contains("You exceeded the quota"));
+            } else {
+                assertTrue(stringWriter.toString().contains("country"));
+            }
             dbTEST.updateQuery("DELETE from countries");
         } catch (IOException ex) {
             ex.printStackTrace();

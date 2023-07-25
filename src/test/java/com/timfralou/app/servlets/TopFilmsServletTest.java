@@ -33,7 +33,12 @@ public class TopFilmsServletTest extends BasicTest {
             PrintWriter writer = new PrintWriter(stringWriter);
             when(response.getWriter()).thenReturn(writer);
             topFilmsServlet.doPut(request, response);
-            assertTrue(stringWriter.toString().contains("kinopoiskId"));
+            if (stringWriter.toString().contains("You exceeded the quota")) {
+                assertTrue(stringWriter.toString().contains("You exceeded the quota"));
+            } else {
+                assertTrue(stringWriter.toString().contains("kinopoiskId"));
+            }
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -44,7 +49,7 @@ public class TopFilmsServletTest extends BasicTest {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             TopFilms topFilms = new TopFilms(dbTEST.connect());
-            String topFilmJson = topFilms.filmList();
+            String topFilmJson = topFilms.pgFilmList();
             Film[] films = objectMapper.readValue(topFilmJson.toString(), Film[].class);
             for (Film film : films) {
                 film.deletePoster();

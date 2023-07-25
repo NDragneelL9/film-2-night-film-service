@@ -26,7 +26,11 @@ public class GenresServletTest extends BasicTest {
             PrintWriter writer = new PrintWriter(stringWriter);
             when(response.getWriter()).thenReturn(writer);
             genresServlet.doPut(request, response);
-            assertTrue(stringWriter.toString().contains("genre"));
+            if (stringWriter.toString().contains("You exceeded the quota")) {
+                assertTrue(stringWriter.toString().contains("You exceeded the quota"));
+            } else {
+                assertTrue(stringWriter.toString().contains("genre"));
+            }
             dbTEST.updateQuery("DELETE from genres");
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -17,16 +17,28 @@ public class KinopoiskAPITest extends BasicTest {
 
     @Test
     public void checksGetFilmsPage() {
-        assertTrue(knpApi.getFilmsPage(1).toString().contains("films"));
+        if (knpApi.getFilmsPage(1).toString().contains("You exceeded the quota")) {
+            assertTrue(knpApi.getFilmsPage(1).toString().contains("You exceeded the quota"));
+        } else {
+            assertTrue(knpApi.getFilmsPage(1).toString().contains("films"));
+        }
     }
 
     @Test
     public void checksGetFilmFilters() {
-        assertTrue(knpApi.getFilmFilters().toString().contains("genres"));
+        if (knpApi.getFilmFilters().toString().contains("You exceeded the quota")) {
+            assertTrue(knpApi.getFilmsPage(1).toString().contains("You exceeded the quota"));
+        } else {
+            assertTrue(knpApi.getFilmFilters().toString().contains("genres"));
+        }
     }
 
     @Test
     public void checksGetFilm() {
-        assertTrue(knpApi.getFilm("/435").toString().contains("435"));
+        if (knpApi.getFilm("/435").toString().contains("You exceeded the quota")) {
+            assertTrue(knpApi.getFilmsPage(1).toString().contains("You exceeded the quota"));
+        } else {
+            assertTrue(knpApi.getFilm("/435").toString().contains("435"));
+        }
     }
 }

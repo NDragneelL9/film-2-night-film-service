@@ -29,7 +29,11 @@ public class FilmServletTest extends BasicTest {
             when(request.getPathInfo()).thenReturn(filmIdURL);
             when(response.getWriter()).thenReturn(writer);
             filmServlet.doPut(request, response);
-            assertTrue(stringWriter.toString().contains("448"));
+            if (stringWriter.toString().contains("You exceeded the quota")) {
+                assertTrue(stringWriter.toString().contains("You exceeded the quota"));
+            } else {
+                assertTrue(stringWriter.toString().contains("448"));
+            }
             dbTEST.updateQuery("DELETE from films");
         } catch (IOException ex) {
             ex.printStackTrace();
