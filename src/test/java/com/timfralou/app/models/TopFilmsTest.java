@@ -23,7 +23,7 @@ public class TopFilmsTest extends BasicTest {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        assertTrue(topFilms.filmList().toString().contains("kinopoiskId"));
+        assertTrue(topFilms.pgFilmList().toString().contains("kinopoiskId"));
     }
 
     @AfterAll

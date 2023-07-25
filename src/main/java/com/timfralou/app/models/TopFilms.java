@@ -6,9 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.timfralou.app.api.KinopoiskAPI;
 
 public class TopFilms {
     private final Connection dbConn;
@@ -18,7 +25,7 @@ public class TopFilms {
         this.dbConn = dbConn;
     }
 
-    public String filmList() {
+    public String pgFilmList() {
         try {
             PreparedStatement pstmt = dbConn.prepareStatement("SELECT * from films;");
             ResultSet rs = pstmt.executeQuery();
@@ -65,5 +72,32 @@ public class TopFilms {
                 ratingMpaa, ratingAgeLimits,
                 hasImax, has3D, lastSync, kinopoiskId);
         return film;
+    }
+
+    public String syncTopFilms(KinopoiskAPI knpApi) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String topFilmsJSON = "";
+        String jsonFilmsPage = knpApi.getFilmsPage(1);
+        JSONObject jsonObj = new JSONObject(jsonFilmsPage);
+        if (jsonObj.has("message")) {
+            topFilmsJSON = objectMapper.writeValueAsString(jsonObj.getString("message"));
+        } else {
+            int pagesCount = jsonObj.getInt("pagesCount");
+            List<Film> topFilms = new ArrayList<Film>();
+            for (int i = 1; i <= pagesCount; i++) {
+                String filmsPage = knpApi.getFilmsPage(i);
+                JSONObject filmJSON = new JSONObject(filmsPage);
+                JSONArray jsonFilms = filmJSON.getJSONArray("films");
+                Film[] films = objectMapper.readValue(jsonFilms.toString(), Film[].class);
+                for (Film film : films) {
+                    film.saveToDB(dbConn);
+                    film.downloadPoster();
+                }
+                topFilms = Stream.concat(topFilms.stream(), Arrays.stream(films)).collect(Collectors.toList());
+
+                topFilmsJSON = objectMapper.writeValueAsString(topFilms);
+            }
+        }
+        return topFilmsJSON;
     }
 }
