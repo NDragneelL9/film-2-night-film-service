@@ -18,7 +18,6 @@ public class BaseServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private KinopoiskAPI knpApi;;
     private Connection dbConn;
-    public static final int BATCH_SIZE = 20;
 
     public void init() {
         try {

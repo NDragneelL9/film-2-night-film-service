@@ -11,6 +11,10 @@ import jakarta.servlet.annotation.WebListener;
 public class F2nScheduler implements ServletContextListener {
     private ScheduledExecutorService scheduler;
 
+    public ScheduledExecutorService scheduler() {
+        return this.scheduler;
+    }
+
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();

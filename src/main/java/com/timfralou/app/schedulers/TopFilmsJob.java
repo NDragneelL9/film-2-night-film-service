@@ -12,8 +12,7 @@ public class TopFilmsJob implements Runnable {
         servlet.init();
         try {
             TopFilms topFilms = new TopFilms(servlet.dbConn());
-            String responseJSON = topFilms.syncTopFilms(servlet.knpApi());
-            System.out.println(responseJSON);
+            topFilms.syncTopFilms(servlet.knpApi());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
