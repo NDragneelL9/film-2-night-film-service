@@ -13,7 +13,7 @@ public class CountrySeed {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Country country = objectMapper.readValue(
-                    new File("src/test/java/com/timfralou/app/seeds/jsons/Country.json"), Country.class);
+                    new File("src/main/java/com/timfralou/app/seeds/jsons/Country.json"), Country.class);
             this.country = country;
         } catch (IOException ex) {
             ex.printStackTrace();

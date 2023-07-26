@@ -6,13 +6,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import com.timfralou.app.interfaces.KinopoiskAPI;
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class KinopoiskAPI {
+public class knpAPI implements KinopoiskAPI {
     private final KinopoiskUrls urls = new KinopoiskUrls();
     private final String API_KEY;
 
-    public KinopoiskAPI(Dotenv dotenv) {
+    public knpAPI(Dotenv dotenv) {
         this.API_KEY = dotenv.get("KNPSK_API_KEY");
     }
 

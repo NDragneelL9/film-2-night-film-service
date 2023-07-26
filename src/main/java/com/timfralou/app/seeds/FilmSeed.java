@@ -14,7 +14,7 @@ public class FilmSeed {
         ObjectMapper objectMapper = new ObjectMapper();
         Film film = new Film();
         Film filmInHHMM = new Film();
-        String basePath = "src/test/java/com/timfralou/app/seeds/jsons/";
+        String basePath = "src/main/java/com/timfralou/app/seeds/jsons/";
         try {
             film = objectMapper.readValue(
                     new File(basePath + "Film.json"), Film.class);

@@ -5,7 +5,9 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.timfralou.app.api.KinopoiskAPI;
+import com.timfralou.app.api.FkKinopoiskAPI;
+import com.timfralou.app.api.knpAPI;
+import com.timfralou.app.interfaces.KinopoiskAPI;
 import com.timfralou.app.postgresql.PostgreDB;
 import com.timfralou.app.postgresql.dbType;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -36,11 +38,12 @@ public class BaseServlet extends HttpServlet {
             if (!dockerEnv.get("KNPSK_API_KEY", "").isEmpty()) {
                 db = new PostgreDB(dbType.MAIN, dockerEnv);
                 dotenv = dockerEnv;
+                this.knpApi = new knpAPI(dotenv);
             } else {
                 db = new PostgreDB(dbType.TEST, testEnv);
                 dotenv = testEnv;
+                this.knpApi = new FkKinopoiskAPI();
             }
-            this.knpApi = new KinopoiskAPI(dotenv);
             this.dbConn = db.connect();
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();

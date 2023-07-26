@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.timfralou.app.api.KinopoiskAPI;
+import com.timfralou.app.interfaces.KinopoiskAPI;
 
 public class TopFilms {
     private final Connection dbConn;
@@ -25,19 +25,17 @@ public class TopFilms {
         this.dbConn = dbConn;
     }
 
-    public String pgFilmList() {
+    public List<Film> pgFilmList() {
         try {
             PreparedStatement pstmt = dbConn.prepareStatement("SELECT * from films;");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 filmList.add(pgFilm(rs));
             }
-            ObjectMapper objMapper = new ObjectMapper();
-            String responseJSON = objMapper.writeValueAsString(filmList);
-            return responseJSON;
-        } catch (IOException | SQLException ex) {
+            return filmList;
+        } catch (SQLException ex) {
             ex.printStackTrace();
-            return ex.getMessage();
+            return new ArrayList<>();
         }
     }
 
@@ -74,6 +72,17 @@ public class TopFilms {
         return film;
     }
 
+    public String loadPosters() {
+        this.pgFilmList();
+        if (filmList.isEmpty()) {
+            return "No films to download posters";
+        }
+        for (Film film : filmList) {
+            film.downloadPoster();
+        }
+        return "Posters successfully downloaded";
+    }
+
     public String syncTopFilms(KinopoiskAPI knpApi) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         String topFilmsJSON = "";
@@ -91,10 +100,8 @@ public class TopFilms {
                 Film[] films = objectMapper.readValue(jsonFilms.toString(), Film[].class);
                 for (Film film : films) {
                     film.saveToDB(dbConn);
-                    film.downloadPoster();
                 }
                 topFilms = Stream.concat(topFilms.stream(), Arrays.stream(films)).collect(Collectors.toList());
-
                 topFilmsJSON = objectMapper.writeValueAsString(topFilms);
             }
         }

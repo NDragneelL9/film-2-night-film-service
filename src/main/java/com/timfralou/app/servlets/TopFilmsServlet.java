@@ -11,7 +11,12 @@ public class TopFilmsServlet extends BaseServlet {
 
     public void doGet(HttpServletRequest servRequest, HttpServletResponse servResponse) {
         TopFilms topFilms = new TopFilms(dbConn());
-        String responseJSON = topFilms.pgFilmList();
+        String responseJSON = "";
+        try {
+            responseJSON = super.objMapper().writeValueAsString(topFilms.pgFilmList());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         handleResponse(servResponse, responseJSON);
     }
 

@@ -20,40 +20,24 @@ import com.timfralou.app.seeds.FilmSeed;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class TopFilmsServletTest extends BasicTest {
-
+public class PosterServletTest extends BasicTest {
     @Test
     public void checksDoPutMethod() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        TopFilmsServlet topFilmsServlet = new TopFilmsServlet();
+        PosterServlet posterServlet = new PosterServlet();
+        Film[] films = new FilmSeed().films();
         try {
-            topFilmsServlet.init();
+            posterServlet.init();
+            for (Film film : films) {
+                film.saveToDB(dbTEST.connect());
+            }
             StringWriter stringWriter = new StringWriter();
             PrintWriter writer = new PrintWriter(stringWriter);
             when(response.getWriter()).thenReturn(writer);
-            topFilmsServlet.doPut(request, response);
-            assertTrue(stringWriter.toString().contains("kinopoiskId"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Test
-    public void checksDoGetMethod() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        TopFilmsServlet topFilmsServlet = new TopFilmsServlet();
-        Film film = new FilmSeed().film();
-        try {
-            film.saveToDB(dbTEST.connect());
-            topFilmsServlet.init();
-            StringWriter stringWriter = new StringWriter();
-            PrintWriter writer = new PrintWriter(stringWriter);
-            when(response.getWriter()).thenReturn(writer);
-            topFilmsServlet.doGet(request, response);
-            assertTrue(stringWriter.toString().contains("Forrest Gump"));
-        } catch (IOException | SQLException ex) {
+            posterServlet.doPut(request, response);
+            assertTrue(stringWriter.toString().contains("Posters successfully downloaded"));
+        } catch (SQLException | IOException ex) {
             ex.printStackTrace();
         }
     }
@@ -70,4 +54,5 @@ public class TopFilmsServletTest extends BasicTest {
         }
         dbTEST.updateQuery("DELETE from films");
     }
+
 }

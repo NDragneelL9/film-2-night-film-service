@@ -5,13 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.timfralou.app.BasicTest;
+import com.timfralou.app.interfaces.KinopoiskAPI;
 
 public class KinopoiskAPITest extends BasicTest {
-    private final KinopoiskAPI knpApi = new KinopoiskAPI(localEnv);
+    private final KinopoiskAPI knpApi = new FkKinopoiskAPI();
 
     @Test
     public void checksCtor() {
-        KinopoiskAPI api = new KinopoiskAPI(localEnv);
+        KinopoiskAPI api = new FkKinopoiskAPI();
         assertTrue(api.getClass().toString().contains("KinopoiskAPI"));
     }
 
@@ -35,10 +36,10 @@ public class KinopoiskAPITest extends BasicTest {
 
     @Test
     public void checksGetFilm() {
-        if (knpApi.getFilm("/435").toString().contains("You exceeded the quota")) {
+        if (knpApi.getFilm("/301").toString().contains("You exceeded the quota")) {
             assertTrue(knpApi.getFilmsPage(1).toString().contains("You exceeded the quota"));
         } else {
-            assertTrue(knpApi.getFilm("/435").toString().contains("435"));
+            assertTrue(knpApi.getFilm("/301").toString().contains("301"));
         }
     }
 }
