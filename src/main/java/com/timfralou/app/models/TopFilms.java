@@ -28,7 +28,8 @@ public class TopFilms {
 
     public List<Film> pgFilmList() {
         try {
-            PreparedStatement pstmt = dbConn.prepareStatement("SELECT * from films;");
+            PreparedStatement pstmt = dbConn
+                    .prepareStatement("SELECT * FROM films ORDER BY \"ratingKinopoisk\" DESC LIMIT 250;");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 filmList.add(pgFilm(rs));
