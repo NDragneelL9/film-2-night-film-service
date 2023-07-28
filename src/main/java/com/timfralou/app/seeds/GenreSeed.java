@@ -2,18 +2,15 @@ package com.timfralou.app.seeds;
 
 import java.io.File;
 import java.io.IOException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timfralou.app.models.Genre;
 
-public class GenreSeed {
+public class GenreSeed extends BaseSeed {
     private Genre genre;
 
     public GenreSeed() {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             Genre genre = objectMapper.readValue(
-                    new File("src/main/java/com/timfralou/app/seeds/jsons/Genre.json"), Genre.class);
+                    new File(basePath + "Genre.json"), Genre.class);
             this.genre = genre;
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -27,7 +27,7 @@ CREATE TABLE films (
   "ratingAgeLimits" varchar,
   "hasImax" bool,
   "has3D" bool,
-  "lastSync" varchar
+  "lastSync" timestamp
 );
 CREATE TABLE countries (
   country_id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

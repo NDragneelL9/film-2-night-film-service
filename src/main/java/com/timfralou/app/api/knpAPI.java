@@ -25,9 +25,7 @@ public class knpAPI implements KinopoiskAPI {
         return sendGETRequest(urls.filmFiltersURL());
     }
 
-    public String getFilm(String pathInfo) {
-        String[] pathParts = pathInfo.split("/");
-        String filmId = pathParts[1];
+    public String getFilm(String filmId) {
         return sendGETRequest(urls.filmURL() + filmId);
     }
 
@@ -47,4 +45,8 @@ public class knpAPI implements KinopoiskAPI {
         }
     }
 
+    @Override
+    public String toString() {
+        return "knpAPI [urls=" + urls + ", methods=" + this.getClass().getDeclaredMethods() + "]";
+    }
 }

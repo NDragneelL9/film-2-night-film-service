@@ -13,7 +13,9 @@ public class FilmServlet extends BaseServlet {
         try {
             String responseJSON = "";
             String pathInfo = servRequest.getPathInfo();
-            String filmJson = super.knpApi().getFilm(pathInfo);
+            String[] pathParts = pathInfo.split("/");
+            String filmId = pathParts[1];
+            String filmJson = super.knpApi().getFilm(filmId);
             JSONObject jsonObj = new JSONObject(filmJson);
             if (jsonObj.has("message")) {
                 responseJSON = super.objMapper().writeValueAsString(jsonObj.getString("message"));

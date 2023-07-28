@@ -15,7 +15,7 @@ public class FkKinopoiskAPI implements KinopoiskAPI {
         return new FiltersPage().filtersPage();
     }
 
-    public String getFilm(String pathInfo) {
+    public String getFilm(String filmId) {
         return new FilmPageSeed().filmPage();
     }
 }

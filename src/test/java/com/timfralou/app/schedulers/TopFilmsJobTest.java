@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.sql.SQLException;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timfralou.app.BasicTest;
@@ -21,5 +23,10 @@ public class TopFilmsJobTest extends BasicTest {
         } catch (SQLException | IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    @AfterAll
+    public static void cleanUp() {
+        dbTEST.updateQuery("delete from films;");
     }
 }

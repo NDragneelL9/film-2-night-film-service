@@ -22,7 +22,7 @@ public class TopFilmsServlet extends BaseServlet {
 
     public void doPut(HttpServletRequest servRequest, HttpServletResponse servResponse) {
         try {
-            TopFilms topFilms = new TopFilms(dbConn());
+            TopFilms topFilms = new TopFilms(super.dbConn());
             String responseJSON = topFilms.syncTopFilms(super.knpApi());
             handleResponse(servResponse, responseJSON);
         } catch (IOException ex) {

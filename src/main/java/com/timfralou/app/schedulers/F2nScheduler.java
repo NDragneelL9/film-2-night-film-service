@@ -18,12 +18,13 @@ public class F2nScheduler implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new TopFilmsJob(), 0, 2, TimeUnit.DAYS);
+        scheduler.schedule(new FilmFiltersJob(), 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new TopFilmsJob(), 1, 48, TimeUnit.HOURS);
+        scheduler.scheduleAtFixedRate(new StaleFilmsJob(), 2, 48, TimeUnit.HOURS);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
         scheduler.shutdownNow();
     }
-
 }

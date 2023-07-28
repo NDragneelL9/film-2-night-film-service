@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +60,7 @@ public class TopFilms {
         String ratingAgeLimits = rs.getString("ratingAgeLimits");
         Boolean hasImax = rs.getBoolean("hasImax");
         Boolean has3D = rs.getBoolean("has3D");
-        String lastSync = rs.getString("lastSync");
+        Timestamp lastSync = rs.getTimestamp("lastSync");
         int kinopoiskId = rs.getInt("kinopoiskId");
         Film film = new Film(nameRu, ratingKinopoisk,
                 ratingKinopoiskVoteCount, year,

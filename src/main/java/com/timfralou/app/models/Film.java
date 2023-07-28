@@ -5,11 +5,13 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.timfralou.app.schedulers.syncDate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -59,7 +61,7 @@ public class Film {
     @JsonProperty("has3D")
     private boolean has3D;
     @JsonProperty("lastSync")
-    private String lastSync;
+    private Timestamp lastSync;
     @JsonProperty("genres")
     private Genre[] genres;
     @JsonProperty("countries")
@@ -72,7 +74,7 @@ public class Film {
             String ratingImdb, int ratingImdbVoteCount,
             String webUrl, String description, String type,
             String ratingMpaa, String ratingAgeLimits,
-            Boolean hasImax, Boolean has3D, String lastSync, int kinopoiskId) {
+            Boolean hasImax, Boolean has3D, Timestamp lastSync, int kinopoiskId) {
         this.nameRu = nameRu;
         this.ratingKinopoisk = ratingKinopoisk;
         this.ratingKinopoiskVoteCount = ratingKinopoiskVoteCount;
@@ -138,6 +140,7 @@ public class Film {
                                     +
                                     " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
                                     " ON CONFLICT (\"kinopoiskId\") DO NOTHING;");
+            pstmt.setTimestamp(19, lastSync);
             PreparedStatement completedPstmt = setParams(pstmt);
             int insertCount = completedPstmt.executeUpdate();
             saveAssociatedCountriesGenres(conn);
@@ -164,6 +167,7 @@ public class Film {
                             " \"type\" = ?,\"ratingMpaa\" = ?, \"ratingAgeLimits\" = ?, \"hasImax\" = ?," +
                             " \"has3D\" = ?, \"lastSync\" = ?, \"posterUrl\" = ?" +
                             " WHERE \"kinopoiskId\" = ?;");
+            pstmt.setTimestamp(19, new syncDate().nowAsTsT());
             PreparedStatement completedPstmt = setParams(pstmt);
             int affectedrows = completedPstmt.executeUpdate();
             return affectedrows;
@@ -217,7 +221,6 @@ public class Film {
         pstmt.setString(16, ratingAgeLimits);
         pstmt.setBoolean(17, hasImax);
         pstmt.setBoolean(18, has3D);
-        pstmt.setString(19, lastSync);
         pstmt.setString(20, posterUrl);
         pstmt.setInt(21, kinopoiskId);
         return pstmt;
@@ -240,7 +243,8 @@ public class Film {
     @Override
     public String toString() {
         return "Film [kinopoiskId=" + kinopoiskId + ", nameRu=" + nameRu + ", ratingKinopoisk=" + ratingKinopoisk
-                + ", year=" + year + ", filmLength=" + toMins(filmLength) + ", genres=" + Arrays.toString(genres)
+                + ", year=" + year + ", filmLength=" + toMins(filmLength) + ", lastSync=" + lastSync + ", genres="
+                + Arrays.toString(genres)
                 + ", countries=" + Arrays.toString(countries) + "]";
     }
 }
