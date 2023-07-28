@@ -12,6 +12,7 @@ CREATE TABLE films (
   "nameRu" varchar,
   "nameEn" varchar,
   "nameOriginal" varchar,
+  "posterUrl" varchar,
   "reviewsCount" int,
   "ratingKinopoisk" varchar,
   "ratingKinopoiskVoteCount" int,
@@ -26,7 +27,8 @@ CREATE TABLE films (
   "ratingAgeLimits" varchar,
   "hasImax" bool,
   "has3D" bool,
-  "lastSync" varchar
+  "lastSync" timestamp,
+  "banned" bool
 );
 CREATE TABLE countries (
   country_id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

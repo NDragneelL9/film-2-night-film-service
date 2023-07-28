@@ -1,0 +1,26 @@
+{
+    "pagesCount": 7,
+    "films": [
+        {
+            "filmId": 263531,
+            "nameRu": "Мстители",
+            "nameEn": "The Avengers",
+            "year": "2012",
+            "filmLength": "137",
+            "countries": [
+                {
+                    "country": "США"
+                }
+            ],
+            "genres": [
+                {
+                    "genre": "фантастика"
+                }
+            ],
+            "rating": 7.9,
+            "ratingVoteCount": 284245,
+            "posterUrl": "http://kinopoiskapiunofficial.tech/images/posters/kp/263531.jpg",
+            "posterUrlPreview": "https://kinopoiskapiunofficial.tech/images/posters/kp_small/301.jpg"
+        }
+    ]
+}

@@ -1,35 +1,35 @@
 package com.timfralou.app.models;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import org.json.JSONObject;
+import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
-
+import com.timfralou.app.BasicTest;
 import com.timfralou.app.seeds.GenreSeed;
 
-public class GenreTest {
-    private JSONObject genreJson;
+public class GenreTest extends BasicTest {
+    private Genre genre = new GenreSeed().genre();
 
-    public GenreTest() {
-        String jsonTxt = new String();
-        try {
-            jsonTxt = new String(
-                    Files.readAllBytes(Paths.get("src/test/java/com/timfralou/app/seeds/jsons/Genre.json")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        JSONObject jsonObj = new JSONObject(jsonTxt);
-        this.genreJson = jsonObj;
+    @Test
+    public void constructsCountry() {
+        Genre genre = new Genre("Incredible Genre");
+        boolean isCorrectName = genre.toString().contains("Incredible Genre");
+        assertEquals(true, isCorrectName);
     }
 
     @Test
-    public void hasgenre() {
-        String actualgenre = genreJson.optString("genre", "");
-        Genre genre = new GenreSeed().genre();
-        assertEquals(genre.genre(), actualgenre);
+    public void writesToString() {
+        boolean printsToString = genre.toString().startsWith("Genre [genre=");
+        assertEquals(true, printsToString);
+    }
+
+    @Test
+    public void savesGenreToDB() throws SQLException {
+        int insertedRows = genre.saveToDB(dbTEST.connect());
+        assertEquals(1, insertedRows);
+        cleanUp();
+    }
+
+    private void cleanUp() throws SQLException {
+        dbTEST.updateQuery("DELETE FROM genres");
     }
 }

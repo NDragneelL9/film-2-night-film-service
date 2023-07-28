@@ -2,34 +2,35 @@ package com.timfralou.app.models;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import org.json.JSONObject;
+import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
-
+import com.timfralou.app.BasicTest;
 import com.timfralou.app.seeds.CountrySeed;
 
-public class CountryTest {
-    private JSONObject countryJson;
+public class CountryTest extends BasicTest {
+    private Country country = new CountrySeed().country();
 
-    public CountryTest() {
-        String jsonTxt = new String();
-        try {
-            jsonTxt = new String(
-                    Files.readAllBytes(Paths.get("src/test/java/com/timfralou/app/seeds/jsons/Country.json")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        JSONObject jsonObj = new JSONObject(jsonTxt);
-        this.countryJson = jsonObj;
+    @Test
+    public void constructsCountry() {
+        Country country = new Country("United States");
+        boolean isCorrectName = country.toString().contains("United States");
+        assertEquals(true, isCorrectName);
     }
 
     @Test
-    public void hasCountry() {
-        String actualCountry = countryJson.optString("country", "");
-        Country country = new CountrySeed().country();
-        assertEquals(country.country(), actualCountry);
+    public void writesToString() {
+        boolean printsToString = country.toString().startsWith("Country [country=");
+        assertEquals(true, printsToString);
+    }
+
+    @Test
+    public void savesCountryToDB() throws SQLException {
+        int insertedRows = country.saveToDB(dbTEST.connect());
+        assertEquals(1, insertedRows);
+        cleanUp();
+    }
+
+    private void cleanUp() throws SQLException {
+        dbTEST.updateQuery("DELETE FROM countries");
     }
 }

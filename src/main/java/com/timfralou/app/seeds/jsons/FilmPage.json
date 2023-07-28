@@ -1,0 +1,67 @@
+{
+    "kinopoiskId": 448,
+    "kinopoiskHDId": "46a0706f3a37eb52b933f510ae5c7d21",
+    "imdbId": "tt0109830",
+    "nameRu": "Форрест Гамп",
+    "nameEn": null,
+    "nameOriginal": "Forrest Gump",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/posters/kp/448.jpg",
+    "posterUrlPreview": "https://kinopoiskapiunofficial.tech/images/posters/kp_small/448.jpg",
+    "coverUrl": "https://avatars.mds.yandex.net/get-ott/212840/2a0000017c07230463c534e38065ab1a433f/orig",
+    "logoUrl": "https://avatars.mds.yandex.net/get-ott/200035/2a00000170ed554ce17a2db2b2cfdc134a6c/orig",
+    "reviewsCount": 511,
+    "ratingGoodReview": 93.2,
+    "ratingGoodReviewVoteCount": 437,
+    "ratingKinopoisk": 8.9,
+    "ratingKinopoiskVoteCount": 837765,
+    "ratingImdb": 8.8,
+    "ratingImdbVoteCount": 2153392,
+    "ratingFilmCritics": 7.5,
+    "ratingFilmCriticsVoteCount": 107,
+    "ratingAwait": null,
+    "ratingAwaitCount": 6,
+    "ratingRfCritics": null,
+    "ratingRfCriticsVoteCount": 1,
+    "webUrl": "https://www.kinopoisk.ru/film/448/",
+    "year": 1994,
+    "filmLength": 142,
+    "slogan": "Мир уже никогда не будет прежним, после того как вы увидите его глазами Форреста Гампа",
+    "description": "Сидя на автобусной остановке, Форрест Гамп — не очень умный, но добрый и открытый парень — рассказывает случайным встречным историю своей необыкновенной жизни.\n\nС самого малолетства парень страдал от заболевания ног, соседские мальчишки дразнили его, но в один прекрасный день Форрест открыл в себе невероятные способности к бегу. Подруга детства Дженни всегда его поддерживала и защищала, но вскоре дороги их разошлись.",
+    "shortDescription": "Полувековая история США глазами чудака из Алабамы. Абсолютная классика Роберта Земекиса с Томом Хэнксом",
+    "editorAnnotation": null,
+    "isTicketsAvailable": false,
+    "productionStatus": null,
+    "type": "FILM",
+    "ratingMpaa": "pg13",
+    "ratingAgeLimits": "age16",
+    "countries": [
+        {
+            "country": "США"
+        }
+    ],
+    "genres": [
+        {
+            "genre": "драма"
+        },
+        {
+            "genre": "мелодрама"
+        },
+        {
+            "genre": "комедия"
+        },
+        {
+            "genre": "военный"
+        },
+        {
+            "genre": "история"
+        }
+    ],
+    "startYear": null,
+    "endYear": null,
+    "serial": false,
+    "shortFilm": false,
+    "completed": false,
+    "hasImax": false,
+    "has3D": false,
+    "lastSync": "2023-07-22T03:23:58.080222"
+}
