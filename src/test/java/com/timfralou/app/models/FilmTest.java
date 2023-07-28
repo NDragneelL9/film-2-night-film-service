@@ -1,12 +1,11 @@
 package com.timfralou.app.models;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.SQLException;
 
-import org.junit.jupiter.api.AfterAll;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-
 import com.timfralou.app.BasicTest;
 import com.timfralou.app.seeds.FilmSeed;
 
@@ -30,6 +29,7 @@ public class FilmTest extends BasicTest {
     public void savesFilmToDB() throws SQLException {
         int insertedrows = film.saveToDB(dbTEST.connect());
         assertEquals(1, insertedrows);
+        cleanUp();
     }
 
     @Test
@@ -37,12 +37,18 @@ public class FilmTest extends BasicTest {
         film.saveToDB(dbTEST.connect());
         int affectedrows = film.updateInDB(dbTEST.connect());
         assertEquals(1, affectedrows);
+        cleanUp();
     }
 
-    @AfterAll
-    public static void cleanUp() throws SQLException {
-        // TODO:
-        // film.delete() - deletes from db
+    @Test
+    public void changesFilmPermit() throws SQLException {
+        film.saveToDB(dbTEST.connect());
+        JSONObject permitChanged = new PgFilm(dbTEST.connect()).pgFilmById(448).changePermit(dbTEST.connect());
+        assertTrue(permitChanged.toString().contains("banned"));
+        cleanUp();
+    }
+
+    private void cleanUp() {
         dbTEST.updateQuery("DELETE FROM films");
     }
 }

@@ -40,33 +40,25 @@ public class TopFilmsServletTest extends BasicTest {
     }
 
     @Test
-    public void checksDoGetMethod() {
+    public void checksDoGetMethod() throws SQLException, IOException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         TopFilmsServlet topFilmsServlet = new TopFilmsServlet();
         Film film = new FilmSeed().film();
-        try {
-            film.saveToDB(dbTEST.connect());
-            topFilmsServlet.init();
-            StringWriter stringWriter = new StringWriter();
-            PrintWriter writer = new PrintWriter(stringWriter);
-            when(response.getWriter()).thenReturn(writer);
-            topFilmsServlet.doGet(request, response);
-            assertTrue(stringWriter.toString().contains("Forrest Gump"));
-        } catch (IOException | SQLException ex) {
-            ex.printStackTrace();
-        }
+        film.saveToDB(dbTEST.connect());
+        topFilmsServlet.init();
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+        when(response.getWriter()).thenReturn(writer);
+        topFilmsServlet.doGet(request, response);
+        assertTrue(stringWriter.toString().contains("Forrest Gump"));
     }
 
     @AfterAll
-    public static void cleanUp() {
-        try {
-            TopFilms topFilms = new TopFilms(dbTEST.connect());
-            for (Film film : topFilms.pgFilmList()) {
-                film.deletePoster();
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    public static void cleanUp() throws SQLException {
+        TopFilms topFilms = new TopFilms(dbTEST.connect());
+        for (Film film : topFilms.pgFilmList()) {
+            film.deletePoster();
         }
         dbTEST.updateQuery("DELETE from films");
     }

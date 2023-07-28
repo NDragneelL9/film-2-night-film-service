@@ -21,30 +21,19 @@ public class PostgreDBTest extends BasicTest {
     }
 
     @Test
-    public void worksMainDB() {
-        ResultSet rs;
-        try {
-            rs = dbMAIN.selectQuery("SELECT 1;");
-            if (rs.next()) {
-                assertEquals(1, rs.getInt(1));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            assertEquals(true, false, ex.getMessage());
+    public void worksMainDB() throws SQLException {
+        ResultSet rs = dbMAIN.selectQuery("SELECT 1;");
+        if (rs.next()) {
+            assertEquals(1, rs.getInt(1));
         }
     }
 
     @Test
-    public void worksTestDB() {
-        ResultSet rs;
-        try {
-            rs = dbTEST.selectQuery("SELECT 2;");
-            if (rs.next()) {
-                assertEquals(2, rs.getInt(1));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            assertEquals(true, false, ex.getMessage());
+    public void worksTestDB() throws SQLException {
+        ResultSet rs = dbTEST.selectQuery("SELECT 2;");
+        if (rs.next()) {
+            assertEquals(2, rs.getInt(1));
         }
+
     }
 }

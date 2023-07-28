@@ -7,6 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
+
+import org.json.JSONObject;
+
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -66,6 +69,7 @@ public class Film {
     private Genre[] genres;
     @JsonProperty("countries")
     private Country[] countries;
+    private Boolean banned;
 
     public Film(String nameRu, String ratingKinopoisk,
             int ratingKinopoiskVoteCount, int year,
@@ -74,7 +78,8 @@ public class Film {
             String ratingImdb, int ratingImdbVoteCount,
             String webUrl, String description, String type,
             String ratingMpaa, String ratingAgeLimits,
-            Boolean hasImax, Boolean has3D, Timestamp lastSync, int kinopoiskId) {
+            Boolean hasImax, Boolean has3D, Timestamp lastSync,
+            int kinopoiskId, Boolean banned) {
         this.nameRu = nameRu;
         this.ratingKinopoisk = ratingKinopoisk;
         this.ratingKinopoiskVoteCount = ratingKinopoiskVoteCount;
@@ -93,6 +98,7 @@ public class Film {
         this.has3D = has3D;
         this.lastSync = lastSync;
         this.kinopoiskId = kinopoiskId;
+        this.banned = banned;
     };
 
     public Film() {
@@ -136,9 +142,9 @@ public class Film {
                                     " \"imdbId\", \"nameEn\", \"nameOriginal\", \"reviewsCount\"," +
                                     " \"ratingImdb\", \"ratingImdbVoteCount\", \"webUrl\", \"description\", \"type\"," +
                                     " \"ratingMpaa\", \"ratingAgeLimits\", \"hasImax\", \"has3D\", \"lastSync\"," +
-                                    " \"posterUrl\", \"kinopoiskId\")"
+                                    " \"posterUrl\", \"banned\", \"kinopoiskId\")"
                                     +
-                                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+                                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
                                     " ON CONFLICT (\"kinopoiskId\") DO NOTHING;");
             pstmt.setTimestamp(19, lastSync);
             PreparedStatement completedPstmt = setParams(pstmt);
@@ -165,7 +171,7 @@ public class Film {
                             " \"nameOriginal\" = ?, \"reviewsCount\" = ?, \"ratingImdb\" = ?," +
                             " \"ratingImdbVoteCount\" = ?, \"webUrl\" = ?, \"description\" = ?," +
                             " \"type\" = ?,\"ratingMpaa\" = ?, \"ratingAgeLimits\" = ?, \"hasImax\" = ?," +
-                            " \"has3D\" = ?, \"lastSync\" = ?, \"posterUrl\" = ?" +
+                            " \"has3D\" = ?, \"lastSync\" = ?, \"posterUrl\" = ?, \"banned\" = ?" +
                             " WHERE \"kinopoiskId\" = ?;");
             pstmt.setTimestamp(19, new syncDate().nowAsTsT());
             PreparedStatement completedPstmt = setParams(pstmt);
@@ -222,7 +228,8 @@ public class Film {
         pstmt.setBoolean(17, hasImax);
         pstmt.setBoolean(18, has3D);
         pstmt.setString(20, posterUrl);
-        pstmt.setInt(21, kinopoiskId);
+        pstmt.setBoolean(21, banned == null ? false : banned);
+        pstmt.setInt(22, kinopoiskId);
         return pstmt;
     }
 
@@ -240,11 +247,19 @@ public class Film {
         poster.delete();
     }
 
+    public JSONObject changePermit(Connection conn) {
+        this.banned = banned == null ? false : !banned;
+        updateInDB(conn);
+        String bannedStr = banned ? "banned" : "unbanned";
+        String response = "nameRu: " + nameRu + ", lasSync: " + lastSync + ", is now " + bannedStr;
+        return new JSONObject().put("message", response);
+    }
+
     @Override
     public String toString() {
         return "Film [kinopoiskId=" + kinopoiskId + ", nameRu=" + nameRu + ", ratingKinopoisk=" + ratingKinopoisk
                 + ", year=" + year + ", filmLength=" + toMins(filmLength) + ", lastSync=" + lastSync + ", genres="
                 + Arrays.toString(genres)
-                + ", countries=" + Arrays.toString(countries) + "]";
+                + ", countries=" + Arrays.toString(countries) + ", banned=" + banned + "]";
     }
 }

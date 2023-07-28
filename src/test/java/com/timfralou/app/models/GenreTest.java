@@ -2,10 +2,7 @@ package com.timfralou.app.models;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.SQLException;
-
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-
 import com.timfralou.app.BasicTest;
 import com.timfralou.app.seeds.GenreSeed;
 
@@ -29,10 +26,10 @@ public class GenreTest extends BasicTest {
     public void savesGenreToDB() throws SQLException {
         int insertedRows = genre.saveToDB(dbTEST.connect());
         assertEquals(1, insertedRows);
+        cleanUp();
     }
 
-    @AfterAll
-    public static void cleanUp() throws SQLException {
+    private void cleanUp() throws SQLException {
         dbTEST.updateQuery("DELETE FROM genres");
     }
 }

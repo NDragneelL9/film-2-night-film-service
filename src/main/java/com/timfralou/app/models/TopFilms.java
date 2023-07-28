@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,49 +28,17 @@ public class TopFilms {
     public List<Film> pgFilmList() {
         try {
             PreparedStatement pstmt = dbConn
-                    .prepareStatement("SELECT * FROM films ORDER BY \"ratingKinopoisk\" DESC LIMIT 250;");
+                    .prepareStatement(
+                            "SELECT * FROM films where \"banned\" = false ORDER BY \"ratingKinopoisk\" DESC LIMIT 250;");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                filmList.add(pgFilm(rs));
+                filmList.add(new PgFilm(dbConn).pgToFilm(rs));
             }
             return filmList;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return new ArrayList<>();
         }
-    }
-
-    private Film pgFilm(ResultSet rs) throws SQLException {
-        String nameRu = rs.getString("nameRu");
-        String ratingKinopoisk = rs.getString("ratingKinopoisk");
-        int ratingKinopoiskVoteCount = rs.getInt("ratingKinopoiskVoteCount");
-        int year = rs.getInt("year");
-        int filmLength = rs.getInt("filmLength");
-        String imdbId = rs.getString("imdbId");
-        String nameEn = rs.getString("nameEn");
-        String nameOriginal = rs.getString("nameOriginal");
-        String posterUrl = rs.getString("posterUrl");
-        int reviewsCount = rs.getInt("reviewsCount");
-        String ratingImdb = rs.getString("ratingImdb");
-        int ratingImdbVoteCount = rs.getInt("ratingImdbVoteCount");
-        String webUrl = rs.getString("webUrl");
-        String description = rs.getString("description");
-        String type = rs.getString("type") != null ? rs.getString("type") : filmType.UNKNOWN.toString();
-        String ratingMpaa = rs.getString("ratingMpaa");
-        String ratingAgeLimits = rs.getString("ratingAgeLimits");
-        Boolean hasImax = rs.getBoolean("hasImax");
-        Boolean has3D = rs.getBoolean("has3D");
-        Timestamp lastSync = rs.getTimestamp("lastSync");
-        int kinopoiskId = rs.getInt("kinopoiskId");
-        Film film = new Film(nameRu, ratingKinopoisk,
-                ratingKinopoiskVoteCount, year,
-                filmLength, imdbId, nameEn,
-                nameOriginal, posterUrl, reviewsCount,
-                ratingImdb, ratingImdbVoteCount,
-                webUrl, description, type,
-                ratingMpaa, ratingAgeLimits,
-                hasImax, has3D, lastSync, kinopoiskId);
-        return film;
     }
 
     public String loadPosters() {

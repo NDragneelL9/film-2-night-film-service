@@ -18,25 +18,21 @@ import jakarta.servlet.http.HttpServletResponse;
 public class FilmFiltersServletTest extends BasicTest {
 
     @Test
-    public void checksDoPutMethod() {
+    public void checksDoPutMethod() throws IOException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilmFiltersServlet filmFiltersServlet = new FilmFiltersServlet();
-        try {
-            filmFiltersServlet.init();
-            StringWriter stringWriter = new StringWriter();
-            PrintWriter writer = new PrintWriter(stringWriter);
-            when(response.getWriter()).thenReturn(writer);
-            filmFiltersServlet.doPut(request, response);
-            if (stringWriter.toString().contains("You exceeded the quota")) {
-                assertTrue(stringWriter.toString().contains("You exceeded the quota"));
-            } else {
-                assertTrue(stringWriter.toString().contains("genres"));
-            }
-            dbTEST.updateQuery("DELETE from genres");
-            dbTEST.updateQuery("DELETE from countries");
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        filmFiltersServlet.init();
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+        when(response.getWriter()).thenReturn(writer);
+        filmFiltersServlet.doPut(request, response);
+        if (stringWriter.toString().contains("You exceeded the quota")) {
+            assertTrue(stringWriter.toString().contains("You exceeded the quota"));
+        } else {
+            assertTrue(stringWriter.toString().contains("genres"));
         }
+        dbTEST.updateQuery("DELETE from genres");
+        dbTEST.updateQuery("DELETE from countries");
     }
 }
